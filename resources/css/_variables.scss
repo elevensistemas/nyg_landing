@@ -1,0 +1,40 @@
+// ============================================================================
+// Sistema de variables de NYG Transporte
+// Paleta basada en el logotipo real de la marca: amarillo/dorado + negro.
+// Punto único de cambio de color/tipografía.
+// ============================================================================
+
+:root {
+    --nyg-black-900: #0D0D0D;
+    --nyg-black-800: #1A1A1A;
+    --nyg-black-700: #242424;
+
+    --nyg-yellow-500: #F5B400;
+    --nyg-yellow-600: #D69C00;
+    --nyg-yellow-100: #FCE9B8;
+
+    --nyg-gray-50: #F7F6F3;
+    --nyg-gray-100: #ECEAE4;
+    --nyg-gray-500: #625F58;
+    --nyg-gray-900: #171512;
+    --nyg-white: #FFFFFF;
+
+    --nyg-radius-sm: 8px;
+    --nyg-radius-md: 14px;
+    --nyg-shadow-sm: 0 2px 10px rgba(13, 13, 13, 0.08);
+    --nyg-shadow-md: 0 10px 28px rgba(13, 13, 13, 0.16);
+
+    --nyg-font-heading: 'Poppins', 'Inter', system-ui, -apple-system, sans-serif;
+    --nyg-font-body: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+// Overrides puntuales de variables de Bootstrap (no se reescribe el framework entero)
+$primary: #F5B400;
+$secondary: #0D0D0D;
+$warning: #F5B400;
+$body-color: #171512;
+$body-bg: #FFFFFF;
+$font-family-sans-serif: 'Inter', system-ui, -apple-system, sans-serif;
+$border-radius: .5rem;
+$border-radius-lg: .75rem;
+$enable-shadows: false;

@@ -1,0 +1,6 @@
+User-agent: *
+Disallow: /admin
+Disallow: /cotizacion/gracias
+Allow: /
+
+Sitemap: https://nygtransporte.com.ar/sitemap.xml
