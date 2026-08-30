@@ -11,7 +11,7 @@ return [
     'contacto' => [
         'email' => 'info@nygtransporte.com.ar',
         'telefono_visible' => '+54 9 11 7063 9810',
-        'whatsapp' => env('WHATSAPP_NUMBER', '5491130091907'),
+        'whatsapp' => env('WHATSAPP_NUMBER', '5491178560714'),
         'direccion' => 'Blanco Encalada 1362, 2° 6°, Villa Madero, Buenos Aires',
         'rnpsp' => '1117',
         'facebook' => 'https://www.facebook.com/nygtransporteok/',

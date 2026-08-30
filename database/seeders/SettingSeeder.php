@@ -18,7 +18,7 @@ class SettingSeeder extends Seeder
         $settings = [
             ['key' => 'contact_email', 'value' => 'info@nygtransporte.com.ar', 'type' => 'text', 'group' => 'contacto', 'label' => 'Correo de contacto'],
             ['key' => 'contact_phone_display', 'value' => '+54 9 11 7063 9810', 'type' => 'text', 'group' => 'contacto', 'label' => 'Teléfono visible (A CONFIRMAR: difiere del número usado en el enlace tel: del sitio actual)'],
-            ['key' => 'whatsapp_number', 'value' => env('WHATSAPP_NUMBER', '5491130091907'), 'type' => 'text', 'group' => 'contacto', 'label' => 'WhatsApp (formato internacional, sin signos)'],
+            ['key' => 'whatsapp_number', 'value' => env('WHATSAPP_NUMBER', '5491178560714'), 'type' => 'text', 'group' => 'contacto', 'label' => 'WhatsApp (formato internacional, sin signos)'],
             ['key' => 'address', 'value' => 'José Cubas 3999, Devoto, Cap. Fed.', 'type' => 'text', 'group' => 'contacto', 'label' => 'Dirección de oficina'],
             ['key' => 'business_hours', 'value' => '', 'type' => 'text', 'group' => 'contacto', 'label' => 'Horario de atención (pendiente de confirmar, no publicado por NYG)'],
             ['key' => 'facebook_url', 'value' => 'https://www.facebook.com/nygtransporteok/', 'type' => 'text', 'group' => 'redes', 'label' => 'Facebook'],

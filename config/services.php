@@ -19,6 +19,6 @@ return [
 
     // Número de WhatsApp comercial de NYG (confirmar el número real antes de publicar).
     'whatsapp' => [
-        'number' => env('WHATSAPP_NUMBER', '5491130091907'),
+        'number' => env('WHATSAPP_NUMBER', '5491178560714'),
     ],
 ];
