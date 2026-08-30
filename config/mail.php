@@ -30,5 +30,5 @@ return [
     ],
 
     // Correo interno que recibe copia de cada consulta de contacto y cotización.
-    'notify_address' => env('MAIL_NOTIFY_ADDRESS', 'info@nygtransporte.com.ar'),
+    'notify_address' => env('MAIL_NOTIFY_ADDRESS', 'info@nygtransporte.com.ar, mariano.caiban@nygtransporte.com.ar, franco.gradilone@nygtransporte.com.ar'),
 ];

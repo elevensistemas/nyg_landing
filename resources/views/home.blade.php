@@ -7,7 +7,7 @@
     // Mapeo de imágenes para cada uno de los servicios semilla
     $imageMap = [
         'transporte-terrestre' => asset('images/service-terrestre.jpg'),
-        'transporte-refrigerado' => asset('images/service-refrigerado.jpg'),
+        'cross-docking' => asset('images/service-crossdocking.jpg'),
         'almacenamiento' => asset('images/service-almacenamiento.jpg'),
         'distribucion' => asset('images/service-distribucion.jpg'),
         'cargas-completas' => asset('images/service-completo.jpg'),
@@ -74,8 +74,7 @@
                 <div class="hero-slide-premium" style="background-image: url('{{ asset('images/mapa_argentina_red.jpg') }}');">
                     <div class="container h-100 d-flex align-items-center">
                         <div class="hero-content">
-                            <span class="hero-badge">Tranquilidad Absoluta</span>
-                            <h1 class="hero-title">No vendemos transporte.<br>Vendemos tranquilidad.</h1>
+                            <h1 class="hero-title">No vendemos transporte.<br>Vendemos <span style="color: #fbbf24;">tranquilidad.</span></h1>
                             <p class="hero-text">Respaldo profesional y atención directa las 24 horas del día. Un equipo dedicado exclusivamente a cuidar tus compromisos comerciales.</p>
                             <div class="hero-buttons">
                                 <a href="{{ route('cotizacion') }}" class="btn btn-premium-yellow">
@@ -187,7 +186,7 @@
         <div class="row g-4 justify-content-center">
             @forelse($allServices->take(6) as $i => $service)
                 @php
-                    $imgUrl = $imageMap[$service->slug] ?? ($service->cover_image ? asset('storage/' . $service->cover_image) : asset('images/hero-fleet.jpg'));
+                    $imgUrl = $service->cover_image ? asset('storage/' . $service->cover_image) : ($imageMap[$service->slug] ?? asset('images/hero-fleet.jpg'));
                 @endphp
                 <div class="col-lg-4 col-md-6">
                     <div class="service-card-compact">

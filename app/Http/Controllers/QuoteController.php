@@ -44,7 +44,8 @@ class QuoteController extends Controller
         }
 
         try {
-            Mail::to(config('mail.notify_address'))->send(new QuoteRequestReceived($quote));
+            $notifyRecipients = array_filter(array_map('trim', explode(',', config('mail.notify_address'))));
+            Mail::to($notifyRecipients)->send(new QuoteRequestReceived($quote));
             Mail::to($quote->email)->send(new QuoteRequestConfirmation($quote));
         } catch (\Throwable $e) {
             Log::error('No se pudo enviar el correo de solicitud de cotización: '.$e->getMessage());

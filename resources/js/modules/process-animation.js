@@ -32,56 +32,63 @@ export function initProcessAnimation() {
             paused: true 
         });
 
-        // Configuración de la animación secuencial de ángulos
+        // Configuración de la animación secuencial de ángulos (1 -> 2 -> 3 -> Salto a 4 -> 5 -> 6 -> Retorno a 1)
         desktopTl
-            // Inicialización paso 01
-            .call(() => setActiveStep(1))
+            // --- PASO 01 (Arriba Izquierda: 150°) ---
+            .call(() => {
+                state.angle = 150;
+                updateDotPosition(150);
+                setActiveStep(1);
+            })
+            .to(glowingDot, { opacity: 1, duration: 0.3, ease: "power1.in" })
             .to(state, {
                 angle: 180,
-                duration: 1.5,
+                duration: 1.4,
                 ease: "power1.inOut",
                 onUpdate: () => updateDotPosition(state.angle)
             })
-            // Paso 02
+
+            // --- PASO 02 (Medio Izquierda: 180°) ---
             .call(() => setActiveStep(2))
             .to(state, {
                 angle: 210,
-                duration: 1.5,
+                duration: 1.4,
                 ease: "power1.inOut",
                 onUpdate: () => updateDotPosition(state.angle)
             })
-            // Paso 03
+
+            // --- PASO 03 (Abajo Izquierda: 210°) ---
             .call(() => setActiveStep(3))
+            .to({}, { duration: 0.5 }) // Breve permanencia
+            .to(glowingDot, { opacity: 0, duration: 0.35, ease: "power1.out" }) // Desaparece la pelotita
+
+            // --- SALTO A PASO 04 (Arriba Derecha: 30°) ---
+            .call(() => {
+                state.angle = 30;
+                updateDotPosition(30);
+                setActiveStep(4);
+            })
+            .to(glowingDot, { opacity: 1, duration: 0.35, ease: "power1.in" }) // Aparece en el punto 4
             .to(state, {
-                angle: 330,
-                duration: 2.2, // Mayor duración para cruzar la parte inferior
+                angle: 0,
+                duration: 1.4,
                 ease: "power1.inOut",
                 onUpdate: () => updateDotPosition(state.angle)
             })
-            // Paso 04
-            .call(() => setActiveStep(4))
-            .to(state, {
-                angle: 360,
-                duration: 1.5,
-                ease: "power1.inOut",
-                onUpdate: () => updateDotPosition(state.angle)
-            })
-            // Paso 05
+
+            // --- PASO 05 (Medio Derecha: 0°) ---
             .call(() => setActiveStep(5))
             .to(state, {
-                angle: 390,
-                duration: 1.5,
+                angle: -30,
+                duration: 1.4,
                 ease: "power1.inOut",
                 onUpdate: () => updateDotPosition(state.angle)
             })
-            // Paso 06
+
+            // --- PASO 06 (Abajo Derecha: -30°) ---
             .call(() => setActiveStep(6))
-            .to(state, {
-                angle: 510, // Retorno al punto inicial (150 grados)
-                duration: 2.2, // Mayor duración para cruzar la parte superior
-                ease: "power1.inOut",
-                onUpdate: () => updateDotPosition(state.angle)
-            });
+            .to({}, { duration: 0.5 }) // Breve permanencia
+            .to(glowingDot, { opacity: 0, duration: 0.35, ease: "power1.out" }); // Desaparece antes de reiniciar el ciclo en el paso 1
 
         // 1. Animación inicial (entrada en cascada)
         const observer = new IntersectionObserver((entries) => {

@@ -26,7 +26,8 @@ class ContactController extends Controller
         ]));
 
         try {
-            Mail::to(config('mail.notify_address'))->send(new ContactRequestReceived($contactRequest));
+            $notifyRecipients = array_filter(array_map('trim', explode(',', config('mail.notify_address'))));
+            Mail::to($notifyRecipients)->send(new ContactRequestReceived($contactRequest));
         } catch (\Throwable $e) {
             // El formulario nunca debe fallar para el usuario por un problema de SMTP;
             // la consulta ya quedó guardada en la base de datos. Se registra el error

@@ -35,12 +35,12 @@ class ServiceSeeder extends Seeder
             ],
             [
                 'category' => $transporte,
-                'name' => 'Transporte refrigerado',
-                'problem' => 'Tu mercadería necesita mantener una cadena de frío estricta y no podés arriesgarte a perderla en el camino.',
-                'short_description' => 'Unidades equipadas para carga congelada y supercongelada, según los requerimientos de frío de cada producto.',
-                'description' => "Disponemos de vehículos equipados para el transporte de carga congelada y supercongelada. Las unidades refrigeradas cumplen con los requerimientos de frío según el tipo de producto transportado.\n\nEsto permite trasladar mercadería sensible a la temperatura sin comprometer su condición durante el viaje.",
-                'benefits' => "Unidades equipadas para congelado y supercongelado.\nCumplimiento de los requerimientos de frío según el producto.\nSeguimiento satelital también en unidades refrigeradas.",
-                'icon' => 'thermometer',
+                'name' => 'Cross-Docking',
+                'problem' => 'Necesitás agilizar la distribución y transferir mercadería con mínimo almacenamiento.',
+                'short_description' => 'Transferencia directa de mercadería con mínimo almacenamiento para acelerar los tiempos de tránsito.',
+                'description' => "Consolidamos y desconsolidamos cargas directamente en nuestras plataformas de transferencia. Los productos entrantes se despachan de forma inmediata hacia sus destinos finales, reduciendo costos de almacenamiento y optimizando los tiempos de tránsito.",
+                'benefits' => "Reducción en los costos de almacenamiento y manipulación.\nDisminución del tiempo total del ciclo de entrega.\nOptimización del flujo de stock en centros urbanos.",
+                'icon' => 'refresh-cw',
                 'is_featured_on_home' => true,
             ],
             [
