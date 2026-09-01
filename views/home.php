@@ -393,7 +393,7 @@ $imageMap = [
                 <div class="logos-fade-group <?= $index === 0 ? 'active' : '' ?>" id="logo-group-<?= $index + 1 ?>" style="<?= $index > 0 ? 'display: none;' : 'display: flex;' ?>">
                     <?php foreach ($group as $client): ?>
                         <div class="logo-fade-item">
-                            <img src="<?= e($client['logo_url']) ?>" alt="Logo de <?= e($client['name']) ?>" class="client-fade-logo" loading="lazy">
+                            <img src="<?= e(client_logo_url($client)) ?>" alt="Logo de <?= e($client['name']) ?>" class="client-fade-logo" loading="lazy">
                         </div>
                     <?php endforeach; ?>
                 </div>

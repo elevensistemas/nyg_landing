@@ -12,7 +12,7 @@
                 <?php foreach ($clients as $client): ?>
                     <div class="col-6 col-md-3 col-lg-2 text-center">
                         <div class="p-3 rounded-4 border border-secondary-subtle d-flex align-items-center justify-content-center" style="background-color: #111; height: 100px;">
-                            <img src="<?= e($client['logo_url']) ?>" alt="Logo de <?= e($client['name']) ?>" loading="lazy" class="img-fluid" style="max-height: 60px;">
+                            <img src="<?= e(client_logo_url($client)) ?>" alt="Logo de <?= e($client['name']) ?>" loading="lazy" class="img-fluid" style="max-height: 60px;">
                         </div>
                     </div>
                 <?php endforeach; ?>

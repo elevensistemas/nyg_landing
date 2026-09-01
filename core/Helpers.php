@@ -170,3 +170,32 @@ if (!function_exists('route')) {
         return '/';
     }
 }
+
+if (!function_exists('client_logo_url')) {
+    function client_logo_url(array $client): string {
+        $logoUrl = $client['logo_url'] ?? ($client['logo_path'] ?? '');
+        $logoPath = ltrim($logoUrl, '/');
+        
+        if (!empty($logoPath)) {
+            $diskPath = __DIR__ . '/../public/' . $logoPath;
+            if (file_exists($diskPath)) {
+                return asset($logoPath);
+            }
+        }
+        
+        $name = strtolower(trim($client['name'] ?? ''));
+        if (str_contains($name, 'mercado') || str_contains($name, 'libre')) {
+            return asset('images/clients/mercadolibre.png');
+        } elseif (str_contains($name, 'ocasa')) {
+            return asset('images/clients/ocasa.png');
+        } elseif (str_contains($name, 'welivery')) {
+            return asset('images/clients/welivery.png');
+        } elseif (str_contains($name, 'webpack')) {
+            return asset('images/clients/webpack.png');
+        } elseif (str_contains($name, 'accenture')) {
+            return asset('images/clients/accenture.svg');
+        }
+        
+        return asset('images/clients/mercadolibre.png');
+    }
+}
