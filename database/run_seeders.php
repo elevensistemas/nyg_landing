@@ -83,7 +83,7 @@ try {
             'summary' => 'Transporte de cargas completas, coordinado según el volumen y el tipo de mercadería.',
             'description' => "Coordinamos el traslado de cargas completas de una forma personalizada, evaluando el tipo de mercadería, el destino y los tiempos requeridos para cada operación.",
             'cover_image' => null,
-            'is_featured' => 0,
+            'is_featured' => 1,
             'sort_order' => 5
         ],
         [
@@ -93,7 +93,7 @@ try {
             'summary' => 'Servicio integral de envíos puerta a puerta.',
             'description' => "Brindamos un servicio de envío puerta a puerta, ocupándonos del traslado completo de la mercadería desde el punto de origen hasta el destino final indicado por el cliente.",
             'cover_image' => null,
-            'is_featured' => 0,
+            'is_featured' => 1,
             'sort_order' => 6
         ],
     ];
@@ -104,24 +104,31 @@ try {
         if (!$stmt->fetch()) {
             $db->prepare("INSERT INTO services (service_category_id, title, slug, summary, description, is_featured, sort_order) VALUES (?, ?, ?, ?, ?, ?, ?)")
                ->execute([$srv['service_category_id'], $srv['title'], $srv['slug'], $srv['summary'], $srv['description'], $srv['is_featured'], $srv['sort_order']]);
+        } else {
+            $db->prepare("UPDATE services SET is_featured = ?, sort_order = ? WHERE slug = ?")
+               ->execute([$srv['is_featured'], $srv['sort_order'], $srv['slug']]);
         }
     }
     echo "[OK] Servicios sembrados.\n";
 
     // 3. Clients
     $clients = [
-        ['name' => 'YPF', 'logo_url' => '/images/logo-ypf.png', 'is_featured' => 1, 'sort_order' => 1],
-        ['name' => 'Quilmes', 'logo_url' => '/images/logo-quilmes.png', 'is_featured' => 1, 'sort_order' => 2],
-        ['name' => 'Shell', 'logo_url' => '/images/logo-shell.png', 'is_featured' => 1, 'sort_order' => 3],
-        ['name' => 'Danone', 'logo_url' => '/images/logo-danone.png', 'is_featured' => 1, 'sort_order' => 4],
+        ['name' => 'Mercado Libre', 'logo_url' => '/images/clients/mercadolibre.png', 'is_featured' => 1, 'is_active' => 1, 'sort_order' => 1],
+        ['name' => 'Ocasa', 'logo_url' => '/images/clients/ocasa.png', 'is_featured' => 1, 'is_active' => 1, 'sort_order' => 2],
+        ['name' => 'Webpack', 'logo_url' => '/images/clients/webpack.png', 'is_featured' => 1, 'is_active' => 1, 'sort_order' => 3],
+        ['name' => 'Welivery', 'logo_url' => '/images/clients/welivery.png', 'is_featured' => 1, 'is_active' => 1, 'sort_order' => 4],
+        ['name' => 'Accenture', 'logo_url' => '/images/clients/accenture.svg', 'is_featured' => 1, 'is_active' => 1, 'sort_order' => 5],
     ];
 
     foreach ($clients as $cli) {
         $stmt = $db->prepare("SELECT id FROM clients WHERE name = ?");
         $stmt->execute([$cli['name']]);
         if (!$stmt->fetch()) {
-            $db->prepare("INSERT INTO clients (name, logo_url, is_featured, sort_order) VALUES (?, ?, ?, ?)")
-               ->execute([$cli['name'], $cli['logo_url'], $cli['is_featured'], $cli['sort_order']]);
+            $db->prepare("INSERT INTO clients (name, logo_url, is_featured, is_active, sort_order) VALUES (?, ?, ?, ?, ?)")
+               ->execute([$cli['name'], $cli['logo_url'], $cli['is_featured'], $cli['is_active'], $cli['sort_order']]);
+        } else {
+            $db->prepare("UPDATE clients SET logo_url = ?, is_featured = ?, is_active = ?, sort_order = ? WHERE name = ?")
+               ->execute([$cli['logo_url'], $cli['is_featured'], $cli['is_active'], $cli['sort_order'], $cli['name']]);
         }
     }
     echo "[OK] Clientes sembrados.\n";

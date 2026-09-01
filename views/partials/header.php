@@ -11,7 +11,9 @@ $whatsappHref = 'https://wa.me/'.$whatsappNumber.'?text='.rawurlencode('Hola, qu
             </a>
 
             <div class="d-flex align-items-center gap-2 ms-auto order-lg-last">
-                <a class="btn btn-premium-cta" href="<?= route('cotizacion') ?>">Solicitar cotización</a>
+                <a class="btn btn-premium-yellow btn-premium-cta d-none d-sm-inline-flex" href="<?= route('cotizacion') ?>">
+                    Solicitar cotización
+                </a>
                 
                 <button class="navbar-toggler border-0 ms-2" type="button" data-bs-toggle="collapse" data-bs-target="#navPrincipal"
                     aria-controls="navPrincipal" aria-expanded="false" aria-label="Abrir menú de navegación">
@@ -26,6 +28,11 @@ $whatsappHref = 'https://wa.me/'.$whatsappNumber.'?text='.rawurlencode('Hola, qu
                     <li class="nav-item"><a class="nav-link" href="<?= route('home') ?>#tecnologia">Tecnología</a></li>
                     <li class="nav-item"><a class="nav-link" href="<?= route('empresa') ?>">Nosotros</a></li>
                     <li class="nav-item"><a class="nav-link" href="<?= route('contacto') ?>">Contacto</a></li>
+                    <li class="nav-item d-lg-none mt-2 pt-2 border-top border-white-10">
+                        <a class="btn btn-premium-yellow w-100 justify-content-center mb-2" href="<?= route('cotizacion') ?>">
+                            Solicitar cotización
+                        </a>
+                    </li>
                     <li class="nav-item ms-lg-3">
                         <a class="btn btn-whatsapp-header" href="<?= e($whatsappHref) ?>" target="_blank" rel="noopener">
                             <svg width="16" height="16" fill="currentColor" class="bi bi-whatsapp me-1" viewBox="0 0 16 16" aria-hidden="true">

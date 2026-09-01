@@ -3363,37 +3363,81 @@ select:focus-visible {
     }
 }
 
+/* Floating WhatsApp button */
+.whatsapp-float {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    width: 58px;
+    height: 58px;
+    background-color: #25d366;
+    color: #ffffff !important;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 24px rgba(37, 211, 102, 0.45), 0 0 0 4px rgba(37, 211, 102, 0.15);
+    z-index: 1040;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    text-decoration: none;
+
+    &:hover {
+        background-color: #20ba59;
+        color: #ffffff !important;
+        transform: scale(1.08) translateY(-3px);
+        box-shadow: 0 12px 30px rgba(37, 211, 102, 0.55), 0 0 0 6px rgba(37, 211, 102, 0.25);
+    }
+
+    @media (max-width: 767.98px) {
+        bottom: 1.25rem;
+        right: 1.25rem;
+        width: 50px;
+        height: 50px;
+
+        svg {
+            width: 24px;
+            height: 24px;
+        }
+    }
+}
+
+.border-white-10 {
+    border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
 /* ==========================================================================
    Optimización Responsive Móvil (Fix Navbar Overlay & Hero Typography)
    ========================================================================== */
 @media (max-width: 991.98px) {
     .site-header {
-        padding-block: 0.75rem !important;
-        background-color: rgba(13, 13, 13, 0.95) !important;
+        padding-block: 0.6rem !important;
+        background-color: rgba(10, 10, 10, 0.95) !important;
         backdrop-filter: blur(20px) !important;
         -webkit-backdrop-filter: blur(20px) !important;
         border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 
         .header-logo {
-            height: 42px !important;
+            height: 40px !important;
+            width: auto;
         }
 
         .btn-premium-cta {
-            padding: 0.45rem 0.85rem !important;
-            font-size: 0.8rem !important;
+            padding: 0.5rem 1rem !important;
+            font-size: 0.85rem !important;
         }
 
         .navbar-collapse {
-            position: relative;
-            z-index: 1050;
-            background-color: rgba(15, 15, 15, 0.98) !important;
-            backdrop-filter: blur(25px) !important;
-            -webkit-backdrop-filter: blur(25px) !important;
+            position: absolute !important;
+            top: 100% !important;
+            left: 1rem !important;
+            right: 1rem !important;
+            z-index: 1050 !important;
+            background-color: #121212 !important;
             border: 1px solid rgba(255, 255, 255, 0.12) !important;
             border-radius: 16px !important;
             padding: 1.25rem 1.5rem !important;
-            margin-top: 0.75rem !important;
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.9) !important;
+            margin-top: 0.5rem !important;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.95), 0 0 30px rgba(0, 0, 0, 0.8) !important;
 
             .navbar-nav {
                 align-items: flex-start !important;
@@ -3404,13 +3448,16 @@ select:focus-visible {
 
                     .nav-link {
                         display: block;
-                        padding: 0.6rem 0.5rem !important;
+                        padding: 0.75rem 0.5rem !important;
                         font-size: 1.05rem !important;
+                        font-weight: 600 !important;
                         color: rgba(255, 255, 255, 0.9) !important;
-                        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+                        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+                        transition: all 0.2s ease;
 
-                        &:hover {
+                        &:hover, &:focus {
                             color: var(--nyg-yellow-500) !important;
+                            padding-left: 0.85rem !important;
                         }
                     }
 
@@ -3419,6 +3466,7 @@ select:focus-visible {
                         display: inline-flex;
                         width: 100%;
                         justify-content: center;
+                        padding: 0.75rem;
                     }
                 }
             }
@@ -3428,7 +3476,8 @@ select:focus-visible {
 
 @media (max-width: 767.98px) {
     .hero-content {
-        padding-top: 4rem !important;
+        padding-top: 3.5rem !important;
+        margin-top: -3rem !important;
     }
 
     .hero-title {
@@ -3454,13 +3503,6 @@ select:focus-visible {
             text-align: center !important;
             padding: 0.75rem 1.25rem !important;
         }
-    }
-
-    .whatsapp-float {
-        bottom: 1.25rem !important;
-        right: 1.25rem !important;
-        width: 3.25rem !important;
-        height: 3.25rem !important;
     }
 }
 

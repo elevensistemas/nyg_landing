@@ -179,7 +179,11 @@ $imageMap = [
             <?php if (!empty($services)): ?>
                 <?php foreach (array_slice($services, 0, 6) as $service): ?>
                     <?php 
-                        $imgUrl = !empty($service['cover_image']) ? asset('storage/' . $service['cover_image']) : ($imageMap[$service['slug']] ?? asset('images/hero-fleet.jpg'));
+                        $storageFile = !empty($service['cover_image']) ? __DIR__ . '/../public/storage/' . ltrim($service['cover_image'], '/') : '';
+                        $hasStorageImg = $storageFile && file_exists($storageFile);
+                        $imgUrl = $hasStorageImg 
+                            ? asset('storage/' . ltrim($service['cover_image'], '/')) 
+                            : ($imageMap[$service['slug']] ?? asset('images/hero-fleet.jpg'));
                     ?>
                     <div class="col-lg-4 col-md-6">
                         <div class="service-card-compact">

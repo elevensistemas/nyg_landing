@@ -16,4 +16,17 @@ export function initScrollHeader() {
 
     toggle();
     window.addEventListener('scroll', toggle, { passive: true });
+
+    // Auto-close mobile menu when clicking a link inside #navPrincipal
+    const navCollapse = document.getElementById('navPrincipal');
+    if (navCollapse) {
+        navCollapse.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                if (navCollapse.classList.contains('show')) {
+                    const toggler = header.querySelector('.navbar-toggler');
+                    if (toggler) toggler.click();
+                }
+            });
+        });
+    }
 }
