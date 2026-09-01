@@ -2,61 +2,86 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\MorphOne;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use Core\Database;
 
-class Service extends Model
-{
-    use HasFactory, SoftDeletes;
-
-    protected $fillable = [
-        'service_category_id',
-        'name',
-        'slug',
-        'problem',
-        'short_description',
-        'description',
-        'benefits',
-        'icon',
-        'cover_image',
-        'order',
-        'is_featured_on_home',
-        'is_published',
-    ];
-
-    protected function casts(): array
-    {
-        return [
-            'is_featured_on_home' => 'boolean',
-            'is_published' => 'boolean',
-        ];
+class Service {
+    public static function allActive(): array {
+        return Database::fetchAll(
+            "SELECT s.*, c.name as category_name FROM services s 
+             LEFT JOIN service_categories c ON s.service_category_id = c.id 
+             WHERE s.is_active = 1 ORDER BY s.sort_order ASC, s.title ASC"
+        );
     }
 
-    public function category(): BelongsTo
-    {
-        return $this->belongsTo(ServiceCategory::class, 'service_category_id');
+    public static function featured(): array {
+        return Database::fetchAll(
+            "SELECT s.*, c.name as category_name FROM services s 
+             LEFT JOIN service_categories c ON s.service_category_id = c.id 
+             WHERE s.is_active = 1 AND s.is_featured = 1 ORDER BY s.sort_order ASC, s.title ASC"
+        );
     }
 
-    public function seo(): MorphOne
-    {
-        return $this->morphOne(SeoMetadata::class, 'seo_metadatable');
+    public static function findBySlug(string $slug): ?array {
+        return Database::fetchOne(
+            "SELECT s.*, c.name as category_name FROM services s 
+             LEFT JOIN service_categories c ON s.service_category_id = c.id 
+             WHERE s.slug = ? AND s.is_active = 1",
+            [$slug]
+        );
     }
 
-    public function scopePublished($query)
-    {
-        return $query->where('is_published', true);
+    public static function all(): array {
+        return Database::fetchAll(
+            "SELECT s.*, c.name as category_name FROM services s 
+             LEFT JOIN service_categories c ON s.service_category_id = c.id 
+             ORDER BY s.sort_order ASC, s.title ASC"
+        );
     }
 
-    public function scopeOrdered($query)
-    {
-        return $query->orderBy('order')->orderBy('name');
+    public static function find(int $id): ?array {
+        return Database::fetchOne("SELECT * FROM services WHERE id = ?", [$id]);
     }
 
-    public function getRouteKeyName(): string
-    {
-        return 'slug';
+    public static function create(array $data): int {
+        Database::execute(
+            "INSERT INTO services (service_category_id, title, slug, summary, description, icon, features, is_featured, is_active, sort_order) 
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            [
+                $data['service_category_id'] ?? null,
+                $data['title'],
+                $data['slug'] ?? ServiceCategory::slugify($data['title']),
+                $data['summary'] ?? '',
+                $data['description'] ?? '',
+                $data['icon'] ?? '',
+                is_array($data['features'] ?? null) ? json_encode($data['features']) : ($data['features'] ?? null),
+                $data['is_featured'] ?? 0,
+                $data['is_active'] ?? 1,
+                $data['sort_order'] ?? 0
+            ]
+        );
+        return (int)Database::lastInsertId();
+    }
+
+    public static function update(int $id, array $data): bool {
+        return Database::execute(
+            "UPDATE services SET service_category_id = ?, title = ?, slug = ?, summary = ?, description = ?, icon = ?, features = ?, is_featured = ?, is_active = ?, sort_order = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?",
+            [
+                $data['service_category_id'] ?? null,
+                $data['title'],
+                $data['slug'] ?? ServiceCategory::slugify($data['title']),
+                $data['summary'] ?? '',
+                $data['description'] ?? '',
+                $data['icon'] ?? '',
+                is_array($data['features'] ?? null) ? json_encode($data['features']) : ($data['features'] ?? null),
+                $data['is_featured'] ?? 0,
+                $data['is_active'] ?? 1,
+                $data['sort_order'] ?? 0,
+                $id
+            ]
+        );
+    }
+
+    public static function delete(int $id): bool {
+        return Database::execute("DELETE FROM services WHERE id = ?", [$id]);
     }
 }

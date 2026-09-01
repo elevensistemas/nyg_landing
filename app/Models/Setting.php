@@ -2,31 +2,35 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Cache;
+use Core\Database;
 
-class Setting extends Model
-{
-    protected $fillable = ['key', 'value', 'type', 'group', 'label'];
-
-    protected static function booted(): void
-    {
-        static::saved(fn () => Cache::forget('nyg.settings'));
-        static::deleted(fn () => Cache::forget('nyg.settings'));
+class Setting {
+    public static function get(string $key, ?string $default = null): ?string {
+        $row = Database::fetchOne("SELECT value FROM settings WHERE key = ?", [$key]);
+        return $row ? $row['value'] : $default;
     }
 
-    /**
-     * Devuelve todas las settings como un array clave => valor, cacheado.
-     */
-    public static function allCached(): array
-    {
-        return Cache::rememberForever('nyg.settings', function () {
-            return static::query()->pluck('value', 'key')->all();
-        });
+    public static function set(string $key, ?string $value): void {
+        $exists = Database::fetchOne("SELECT id FROM settings WHERE key = ?", [$key]);
+        if ($exists) {
+            Database::execute("UPDATE settings SET value = ?, updated_at = CURRENT_TIMESTAMP WHERE key = ?", [$value, $key]);
+        } else {
+            Database::execute("INSERT INTO settings (key, value) VALUES (?, ?)", [$key, $value]);
+        }
     }
 
-    public static function get(string $key, mixed $default = null): mixed
-    {
-        return static::allCached()[$key] ?? $default;
+    public static function all(): array {
+        $rows = Database::fetchAll("SELECT * FROM settings");
+        $settings = [];
+        foreach ($rows as $row) {
+            $settings[$row['key']] = $row['value'];
+        }
+        return $settings;
+    }
+
+    public static function updateMany(array $settings): void {
+        foreach ($settings as $key => $val) {
+            self::set($key, $val);
+        }
     }
 }

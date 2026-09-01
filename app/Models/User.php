@@ -2,33 +2,22 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
+use Core\Database;
 
-class User extends Authenticatable
-{
-    use HasFactory, Notifiable;
+class User {
+    public static function find(int $id): ?array {
+        return Database::fetchOne("SELECT * FROM users WHERE id = ?", [$id]);
+    }
 
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
-        'is_admin',
-    ];
+    public static function findByEmail(string $email): ?array {
+        return Database::fetchOne("SELECT * FROM users WHERE email = ?", [$email]);
+    }
 
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
-
-    protected function casts(): array
-    {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-            'is_admin' => 'boolean',
-        ];
+    public static function create(array $data): int {
+        Database::execute(
+            "INSERT INTO users (name, email, password) VALUES (?, ?, ?)",
+            [$data['name'], $data['email'], password_hash($data['password'], PASSWORD_BCRYPT)]
+        );
+        return (int)Database::lastInsertId();
     }
 }

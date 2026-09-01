@@ -1,0 +1,164 @@
+CREATE TABLE IF NOT EXISTS users (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS service_categories (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name VARCHAR(255) NOT NULL,
+    slug VARCHAR(255) NOT NULL UNIQUE,
+    description TEXT,
+    icon VARCHAR(100),
+    sort_order INTEGER DEFAULT 0,
+    is_active TINYINT DEFAULT 1,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS services (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    service_category_id INTEGER REFERENCES service_categories(id) ON DELETE SET NULL,
+    title VARCHAR(255) NOT NULL,
+    slug VARCHAR(255) NOT NULL UNIQUE,
+    summary TEXT,
+    description TEXT,
+    icon VARCHAR(100),
+    features TEXT,
+    is_featured TINYINT DEFAULT 0,
+    is_active TINYINT DEFAULT 1,
+    sort_order INTEGER DEFAULT 0,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS industries (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name VARCHAR(255) NOT NULL,
+    slug VARCHAR(255) NOT NULL UNIQUE,
+    icon VARCHAR(100),
+    description TEXT,
+    is_active TINYINT DEFAULT 1,
+    sort_order INTEGER DEFAULT 0,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS clients (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name VARCHAR(255) NOT NULL,
+    logo_url VARCHAR(255),
+    industry VARCHAR(255),
+    testimonial TEXT,
+    author_name VARCHAR(255),
+    author_role VARCHAR(255),
+    is_featured TINYINT DEFAULT 0,
+    is_active TINYINT DEFAULT 1,
+    sort_order INTEGER DEFAULT 0,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS faqs (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    category VARCHAR(255),
+    question VARCHAR(255) NOT NULL,
+    answer TEXT NOT NULL,
+    is_active TINYINT DEFAULT 1,
+    sort_order INTEGER DEFAULT 0,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS contact_requests (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    phone VARCHAR(100),
+    company VARCHAR(255),
+    subject VARCHAR(255),
+    message TEXT NOT NULL,
+    status VARCHAR(50) DEFAULT 'pending',
+    notes TEXT,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS quote_requests (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    company_name VARCHAR(255) NOT NULL,
+    contact_name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    phone VARCHAR(100) NOT NULL,
+    origin_city VARCHAR(255) NOT NULL,
+    destination_city VARCHAR(255) NOT NULL,
+    cargo_type VARCHAR(255) NOT NULL,
+    cargo_weight VARCHAR(100),
+    cargo_volume VARCHAR(100),
+    frequency VARCHAR(100),
+    comments TEXT,
+    status VARCHAR(50) DEFAULT 'pending',
+    notes TEXT,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS quote_request_attachments (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    quote_request_id INTEGER REFERENCES quote_requests(id) ON DELETE CASCADE,
+    file_name VARCHAR(255) NOT NULL,
+    file_path VARCHAR(255) NOT NULL,
+    file_size INTEGER,
+    file_type VARCHAR(100),
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS settings (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    key VARCHAR(255) NOT NULL UNIQUE,
+    value TEXT,
+    "group" VARCHAR(100) DEFAULT 'general',
+    type VARCHAR(50) DEFAULT 'text',
+    description VARCHAR(255),
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS pages (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title VARCHAR(255) NOT NULL,
+    slug VARCHAR(255) NOT NULL UNIQUE,
+    is_active TINYINT DEFAULT 1,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS page_sections (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    page_id INTEGER REFERENCES pages(id) ON DELETE CASCADE,
+    key VARCHAR(255) NOT NULL,
+    title VARCHAR(255),
+    subtitle VARCHAR(255),
+    content TEXT,
+    settings TEXT,
+    sort_order INTEGER DEFAULT 0,
+    is_active TINYINT DEFAULT 1,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS legal_pages (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title VARCHAR(255) NOT NULL,
+    slug VARCHAR(255) NOT NULL UNIQUE,
+    content TEXT NOT NULL,
+    meta_title VARCHAR(255),
+    meta_description VARCHAR(255),
+    is_active TINYINT DEFAULT 1,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
