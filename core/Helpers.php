@@ -184,7 +184,15 @@ if (!function_exists('client_logo_url')) {
         }
         
         $name = strtolower(trim($client['name'] ?? ''));
-        if (str_contains($name, 'mercado') || str_contains($name, 'libre')) {
+        if (str_contains($name, 'ypf')) {
+            return asset('images/clients/ypf.svg');
+        } elseif (str_contains($name, 'quilmes')) {
+            return asset('images/clients/quilmes.svg');
+        } elseif (str_contains($name, 'shell')) {
+            return asset('images/clients/shell.svg');
+        } elseif (str_contains($name, 'danone')) {
+            return asset('images/clients/danone.svg');
+        } elseif (str_contains($name, 'mercado') || str_contains($name, 'libre')) {
             return asset('images/clients/mercadolibre.png');
         } elseif (str_contains($name, 'ocasa')) {
             return asset('images/clients/ocasa.png');

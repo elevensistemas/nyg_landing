@@ -113,11 +113,14 @@ try {
 
     // 3. Clients
     $clients = [
-        ['name' => 'Mercado Libre', 'logo_url' => '/images/clients/mercadolibre.png', 'is_featured' => 1, 'is_active' => 1, 'sort_order' => 1],
-        ['name' => 'Ocasa', 'logo_url' => '/images/clients/ocasa.png', 'is_featured' => 1, 'is_active' => 1, 'sort_order' => 2],
-        ['name' => 'Webpack', 'logo_url' => '/images/clients/webpack.png', 'is_featured' => 1, 'is_active' => 1, 'sort_order' => 3],
-        ['name' => 'Welivery', 'logo_url' => '/images/clients/welivery.png', 'is_featured' => 1, 'is_active' => 1, 'sort_order' => 4],
-        ['name' => 'Accenture', 'logo_url' => '/images/clients/accenture.svg', 'is_featured' => 1, 'is_active' => 1, 'sort_order' => 5],
+        ['name' => 'YPF', 'logo_url' => '/images/clients/ypf.svg', 'is_featured' => 1, 'is_active' => 1, 'sort_order' => 1],
+        ['name' => 'Quilmes', 'logo_url' => '/images/clients/quilmes.svg', 'is_featured' => 1, 'is_active' => 1, 'sort_order' => 2],
+        ['name' => 'Shell', 'logo_url' => '/images/clients/shell.svg', 'is_featured' => 1, 'is_active' => 1, 'sort_order' => 3],
+        ['name' => 'Danone', 'logo_url' => '/images/clients/danone.svg', 'is_featured' => 1, 'is_active' => 1, 'sort_order' => 4],
+        ['name' => 'Mercado Libre', 'logo_url' => '/images/clients/mercadolibre.png', 'is_featured' => 1, 'is_active' => 1, 'sort_order' => 5],
+        ['name' => 'Ocasa', 'logo_url' => '/images/clients/ocasa.png', 'is_featured' => 1, 'is_active' => 1, 'sort_order' => 6],
+        ['name' => 'Webpack', 'logo_url' => '/images/clients/webpack.png', 'is_featured' => 1, 'is_active' => 1, 'sort_order' => 7],
+        ['name' => 'Welivery', 'logo_url' => '/images/clients/welivery.png', 'is_featured' => 1, 'is_active' => 1, 'sort_order' => 8],
     ];
 
     foreach ($clients as $cli) {

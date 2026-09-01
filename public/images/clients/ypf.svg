@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 60" width="200" height="60">
+  <g transform="translate(10, 8)">
+    <rect x="0" y="0" width="180" height="44" rx="6" fill="#003B70"/>
+    <path d="M 0 22 H 180" stroke="#F5B400" stroke-width="2.5"/>
+    <text x="90" y="32" font-family="'Inter', 'Arial Black', sans-serif" font-weight="900" font-size="26" fill="#FFFFFF" text-anchor="middle" letter-spacing="4">YPF</text>
+  </g>
+</svg>

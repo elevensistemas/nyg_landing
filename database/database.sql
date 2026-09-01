@@ -89,7 +89,7 @@ CREATE TABLE `clients` (
 
 LOCK TABLES `clients` WRITE;
 /*!40000 ALTER TABLE `clients` DISABLE KEYS */;
-INSERT INTO `clients` VALUES (1,'Mercado Libre','images/clients/mercadolibre.png',NULL,0,1,'2026-08-02 21:19:01','2026-08-02 21:19:01'),(2,'Ocasa','images/clients/ocasa.png',NULL,1,1,'2026-08-02 21:19:01','2026-08-02 21:19:01'),(3,'Webpack','images/clients/webpack.png',NULL,2,1,'2026-08-02 21:19:01','2026-08-02 21:19:01'),(4,'Welivery','images/clients/welivery.png',NULL,3,1,'2026-08-02 21:19:01','2026-08-02 21:19:01');
+INSERT INTO `clients` VALUES (1,'YPF','/images/clients/ypf.svg',NULL,1,1,'2026-08-02 21:19:01','2026-08-02 21:19:01'),(2,'Quilmes','/images/clients/quilmes.svg',NULL,2,1,'2026-08-02 21:19:01','2026-08-02 21:19:01'),(3,'Shell','/images/clients/shell.svg',NULL,3,1,'2026-08-02 21:19:01','2026-08-02 21:19:01'),(4,'Danone','/images/clients/danone.svg',NULL,4,1,'2026-08-02 21:19:01','2026-08-02 21:19:01'),(5,'Mercado Libre','/images/clients/mercadolibre.png',NULL,5,1,'2026-08-02 21:19:01','2026-08-02 21:19:01'),(6,'Ocasa','/images/clients/ocasa.png',NULL,6,1,'2026-08-02 21:19:01','2026-08-02 21:19:01'),(7,'Webpack','/images/clients/webpack.png',NULL,7,1,'2026-08-02 21:19:01','2026-08-02 21:19:01'),(8,'Welivery','/images/clients/welivery.png',NULL,8,1,'2026-08-02 21:19:01','2026-08-02 21:19:01');
 /*!40000 ALTER TABLE `clients` ENABLE KEYS */;
 UNLOCK TABLES;
 
