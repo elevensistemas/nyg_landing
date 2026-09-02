@@ -23,11 +23,11 @@ $whatsappHref = 'https://wa.me/'.$whatsappNumber.'?text='.rawurlencode('Hola, qu
 
             <div class="collapse navbar-collapse" id="navPrincipal">
                 <ul class="navbar-nav mx-auto align-items-lg-center gap-lg-3">
-                    <li class="nav-item"><a class="nav-link" href="<?= route('home') ?>">Inicio</a></li>
-                    <li class="nav-item"><a class="nav-link" href="<?= route('home') ?>#servicios">Servicios</a></li>
-                    <li class="nav-item"><a class="nav-link" href="<?= route('home') ?>#tecnologia">Tecnología</a></li>
-                    <li class="nav-item"><a class="nav-link" href="<?= route('empresa') ?>">Nosotros</a></li>
-                    <li class="nav-item"><a class="nav-link" href="<?= route('contacto') ?>">Contacto</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/">Inicio</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/#servicios">Servicios</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/tecnologia-y-seguimiento">Tecnología</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/empresa">Nosotros</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/contacto">Contacto</a></li>
                     <li class="nav-item d-lg-none mt-2 pt-2 border-top border-white-10">
                         <a class="btn btn-premium-yellow w-100 justify-content-center mb-2" href="<?= route('cotizacion') ?>">
                             Solicitar cotización

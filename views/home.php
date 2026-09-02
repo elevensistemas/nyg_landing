@@ -20,7 +20,7 @@ $imageMap = [
         </div>
 
         <div class="carousel-inner h-100">
-            <!-- Slide 1: Tecnología -->
+            <!-- Slide 1: Logística Integral con Video -->
             <div class="carousel-item active h-100">
                 <div class="hero-slide-premium" style="background-image: url('<?= asset('images/hero-tech.jpg') ?>');">
                     <video autoplay loop muted playsinline class="hero-video-bg">

@@ -18,8 +18,8 @@ try {
     $stmt->execute(['admin@nyg.com']);
     if ($stmt->fetchColumn() == 0) {
         $db->prepare("INSERT INTO users (name, email, password) VALUES (?, ?, ?)")
-            ->execute(['Administrador', 'admin@nyg.com', password_hash('password', PASSWORD_BCRYPT)]);
-        echo "Usuario administrador creado: admin@nyg.com / password\n";
+            ->execute(['Administrador', 'admin@nyg.com', password_hash('NyG26202620', PASSWORD_BCRYPT)]);
+        echo "Usuario administrador creado: admin@nyg.com / NyG26202620\n";
     }
 
     // 3. Insert Default Settings
