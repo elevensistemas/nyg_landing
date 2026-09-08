@@ -49,5 +49,22 @@
 
     <?= \Core\View::partial('partials/footer') ?>
     <?= \Core\View::partial('partials/whatsapp-button') ?>
+
+    <script>
+        // Redirección infalible si la URL tiene o cambia a #tecnologia
+        (function() {
+            function checkHash() {
+                if (window.location.hash === '#tecnologia' || window.location.hash.indexOf('tecnologia') !== -1) {
+                    window.location.href = '/tecnologia-y-seguimiento';
+                }
+            }
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', checkHash);
+            } else {
+                checkHash();
+            }
+            window.addEventListener('hashchange', checkHash);
+        })();
+    </script>
 </body>
 </html>
