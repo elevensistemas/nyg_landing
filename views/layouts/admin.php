@@ -11,6 +11,7 @@ $currentPath = $_SERVER['REQUEST_URI'] ?? '/admin';
     <meta name="robots" content="noindex, nofollow">
     <meta name="csrf-token" content="<?= e(csrf_token()) ?>">
     <title><?= e($metaTitle ?? 'Panel de Administración — NYG Transporte') ?></title>
+    <link rel="icon" href="<?= e(asset('images/IMG_6177.PNG')) ?>" type="image/png">
     <?= vite(['resources/css/app.scss', 'resources/js/app.js']) ?>
 </head>
 <body class="admin-body">

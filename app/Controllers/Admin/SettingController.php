@@ -19,6 +19,9 @@ class SettingController {
         $data = $request->all();
         unset($data['_csrf_token'], $data['_method']);
 
+        // Checkbox handle: if not present in request payload, set to '0'
+        $data['under_construction'] = isset($data['under_construction']) && ($data['under_construction'] === '1' || $data['under_construction'] === 'on') ? '1' : '0';
+
         Setting::updateMany($data);
 
         flash('success', 'Configuración del sitio actualizada correctamente.');

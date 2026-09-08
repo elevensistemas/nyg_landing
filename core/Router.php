@@ -85,6 +85,16 @@ class Router {
         $requestMethod = $request->getMethod();
         $requestPath = $request->getPath();
 
+        $underConstruction = \App\Models\Setting::get('under_construction', '0') === '1';
+        $isAdminRoute = str_starts_with($requestPath, '/admin');
+
+        // If site is in under construction mode and user is not logged in as admin, show under construction page
+        if ($underConstruction && !$isAdminRoute && !Auth::check()) {
+            $html = View::render('under_construction', [], null);
+            Response::html($html);
+            return;
+        }
+
         foreach ($this->routes as $route) {
             if ($route['method'] !== $requestMethod) {
                 continue;
@@ -123,6 +133,14 @@ class Router {
                 }
 
                 if (is_string($response)) {
+                    // Prepend admin banner if under construction mode is active and logged-in admin is viewing public page
+                    if ($underConstruction && !$isAdminRoute && Auth::check()) {
+                        $adminBanner = '<div style="background: linear-gradient(90deg, #f59e0b, #fbbf24); color: #070c18; padding: 10px 16px; text-align: center; font-weight: 700; font-size: 14px; position: sticky; top: 0; z-index: 99999; box-shadow: 0 4px 15px rgba(0,0,0,0.3); font-family: sans-serif;">
+                            🚧 MODO CONSTRUCCIÓN ACTIVO — El sitio está oculto al público. Estás viendo esta vista previa por ser Administrador.
+                            <a href="/admin/settings" style="color: #070c18; text-decoration: underline; margin-left: 10px; font-weight: 800;">[Configurar en Admin]</a>
+                        </div>';
+                        $response = $adminBanner . $response;
+                    }
                     Response::html($response);
                 }
                 return;

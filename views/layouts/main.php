@@ -16,7 +16,7 @@
     <meta property="og:url" content="<?= e(url($_SERVER['REQUEST_URI'] ?? '/')) ?>">
     <meta name="twitter:card" content="summary_large_image">
 
-    <link rel="icon" href="<?= e(asset('images/logo-nyg.png')) ?>" type="image/png">
+    <link rel="icon" href="<?= e(asset('images/IMG_6177.PNG')) ?>" type="image/png">
 
     <?php /* Structured Data Schema */ ?>
     <script type="application/ld+json">

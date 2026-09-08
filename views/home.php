@@ -318,7 +318,7 @@ $imageMap = [
 
                                 <div class="process-center-core-new">
                                     <div class="center-glow-radial"></div>
-                                    <img src="<?= asset('images/logo-nyg.png') ?>" alt="NYG" class="core-brand-logo mb-2">
+                                    <img src="<?= asset('images/IMG_6178.PNG') ?>" alt="NYG" class="core-brand-logo mb-2">
                                     <div class="core-text-block-new text-center">
                                         <span class="core-txt-white">Operación logística</span>
                                         <span class="core-txt-yellow">bajo control</span>

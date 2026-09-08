@@ -7,7 +7,7 @@ $whatsappHref = 'https://wa.me/'.$whatsappNumber.'?text='.rawurlencode('Hola, qu
     <nav class="navbar navbar-expand-lg navbar-dark" aria-label="Navegación principal">
         <div class="container position-relative">
             <a class="navbar-brand" href="<?= route('home') ?>">
-                <img src="<?= asset('images/logo-nyg.png') ?>" alt="NYG Logística Integral" class="header-logo" height="54">
+                <img src="<?= asset('images/IMG_6178.PNG') ?>" alt="NYG Logística Integral" class="header-logo" height="68">
             </a>
 
             <div class="d-flex align-items-center gap-2 ms-auto order-lg-last">

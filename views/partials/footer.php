@@ -9,7 +9,7 @@ $rnpsp = \App\Models\Setting::get('rnpsp', '1117');
         <div class="row gy-5">
             <div class="col-lg-4">
                 <div class="footer-brand-container mb-4">
-                    <img src="<?= asset('images/logo-nyg.png') ?>" alt="NYG Logística Integral" class="footer-logo" height="60">
+                    <img src="<?= asset('images/IMG_6178.PNG') ?>" alt="NYG Logística Integral" class="footer-logo" height="76">
                 </div>
                 <p class="footer-text text-white-50">
                     Líderes en logística inteligente, transporte de media y larga distancia, 
