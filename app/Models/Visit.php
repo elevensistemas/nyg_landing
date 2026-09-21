@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\Helpers\DB;
+use DateTime;
+use DateTimeZone;
 
 class Visit
 {
@@ -11,9 +13,12 @@ class Visit
      */
     public static function getStats(): array
     {
-        $todayVisits = (int)(DB::selectOne("SELECT COUNT(*) as count FROM visits WHERE DATE(visited_at) = CURDATE()")['count'] ?? 0);
-        $todayUniqueIps = (int)(DB::selectOne("SELECT COUNT(DISTINCT ip_address) as count FROM visits WHERE DATE(visited_at) = CURDATE()")['count'] ?? 0);
-        $todayForms = (int)(DB::selectOne("SELECT COUNT(DISTINCT session_id) as count FROM visits WHERE has_submitted_form = 1 AND DATE(visited_at) = CURDATE()")['count'] ?? 0);
+        $tz = new DateTimeZone('America/Argentina/Buenos_Aires');
+        $todayStr = (new DateTime('now', $tz))->format('Y-m-d');
+
+        $todayVisits = (int)(DB::selectOne("SELECT COUNT(*) as count FROM visits WHERE DATE(visited_at) = :today", ['today' => $todayStr])['count'] ?? 0);
+        $todayUniqueIps = (int)(DB::selectOne("SELECT COUNT(DISTINCT ip_address) as count FROM visits WHERE DATE(visited_at) = :today", ['today' => $todayStr])['count'] ?? 0);
+        $todayForms = (int)(DB::selectOne("SELECT COUNT(DISTINCT session_id) as count FROM visits WHERE has_submitted_form = 1 AND DATE(visited_at) = :today", ['today' => $todayStr])['count'] ?? 0);
 
         $totalVisits = (int)(DB::selectOne("SELECT COUNT(*) as count FROM visits")['count'] ?? 0);
         $totalSessions = (int)(DB::selectOne("SELECT COUNT(DISTINCT session_id) as count FROM visits")['count'] ?? 0);
@@ -40,8 +45,7 @@ class Visit
     public static function getRecent(int $limit = 10): array
     {
         return DB::select(
-            "SELECT * FROM visits ORDER BY visited_at DESC, id DESC LIMIT :limit",
-            ['limit' => $limit]
+            "SELECT * FROM visits ORDER BY visited_at DESC, id DESC LIMIT " . (int)$limit
         );
     }
 
@@ -53,6 +57,7 @@ class Visit
         $offset = ($page - 1) * $perPage;
         $where = ["1=1"];
         $params = [];
+        $tz = new DateTimeZone('America/Argentina/Buenos_Aires');
 
         // Filtro de búsqueda libre
         if (!empty($filters['search'])) {
@@ -77,13 +82,21 @@ class Visit
         // Filtro de fecha
         if (!empty($filters['date'])) {
             if ($filters['date'] === 'today') {
-                $where[] = "DATE(visited_at) = CURDATE()";
+                $today = (new DateTime('now', $tz))->format('Y-m-d');
+                $where[] = "DATE(visited_at) = :d_today";
+                $params['d_today'] = $today;
             } elseif ($filters['date'] === 'yesterday') {
-                $where[] = "DATE(visited_at) = DATE_SUB(CURDATE(), INTERVAL 1 DAY)";
+                $yesterday = (new DateTime('-1 day', $tz))->format('Y-m-d');
+                $where[] = "DATE(visited_at) = :d_yesterday";
+                $params['d_yesterday'] = $yesterday;
             } elseif ($filters['date'] === '7days') {
-                $where[] = "visited_at >= DATE_SUB(NOW(), INTERVAL 7 DAY)";
+                $sevenDays = (new DateTime('-7 days', $tz))->format('Y-m-d H:i:s');
+                $where[] = "visited_at >= :d_7days";
+                $params['d_7days'] = $sevenDays;
             } elseif ($filters['date'] === '30days') {
-                $where[] = "visited_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)";
+                $thirtyDays = (new DateTime('-30 days', $tz))->format('Y-m-d H:i:s');
+                $where[] = "visited_at >= :d_30days";
+                $params['d_30days'] = $thirtyDays;
             }
         }
 
@@ -127,8 +140,7 @@ class Visit
              FROM visits 
              GROUP BY page_title, page_url 
              ORDER BY total_views DESC 
-             LIMIT :limit",
-            ['limit' => $limit]
+             LIMIT " . (int)$limit
         );
     }
 
@@ -142,8 +154,7 @@ class Visit
              FROM visits 
              GROUP BY referrer 
              ORDER BY total DESC 
-             LIMIT :limit",
-            ['limit' => $limit]
+             LIMIT " . (int)$limit
         );
     }
 }
