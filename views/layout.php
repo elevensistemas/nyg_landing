@@ -19,7 +19,7 @@ use App\Models\Setting;
     <meta property="og:url" content="<?= htmlspecialchars(asset($_SERVER['REQUEST_URI'])) ?>">
     <meta name="twitter:card" content="summary_large_image">
 
-    <link rel="icon" href="<?= htmlspecialchars(Setting::get('brand_logo_url')) ?>" type="image/svg+xml">
+    <link rel="icon" href="<?= htmlspecialchars((string)Setting::get('brand_logo_url', '/favicon.ico')) ?>" type="image/svg+xml">
 
     <?php // Datos estructurados: TransportationService / LocalBusiness ?>
     <script type="application/ld+json">
