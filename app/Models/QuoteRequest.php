@@ -2,66 +2,58 @@
 
 namespace App\Models;
 
-use Core\Database;
+use App\Helpers\DB;
 
-class QuoteRequest {
-    public static function all(): array {
-        return Database::fetchAll("SELECT * FROM quote_requests ORDER BY created_at DESC");
+class QuoteRequest
+{
+    public const STATUSES = [
+        'nueva' => 'Nueva',
+        'en_analisis' => 'En análisis',
+        'cotizada' => 'Cotizada',
+        'ganada' => 'Ganada',
+        'perdida' => 'Perdida',
+    ];
+
+    public static function all(): array
+    {
+        return DB::select("SELECT qr.*, s.name as service_name FROM quote_requests qr LEFT JOIN services s ON qr.service_id = s.id ORDER BY qr.created_at DESC");
     }
 
-    public static function find(int $id): ?array {
-        $row = Database::fetchOne("SELECT * FROM quote_requests WHERE id = ?", [$id]);
-        if ($row) {
-            $row['attachments'] = Database::fetchAll("SELECT * FROM quote_request_attachments WHERE quote_request_id = ?", [$id]);
-        }
-        return $row;
+    public static function find(int $id): ?array
+    {
+        return DB::selectOne("SELECT qr.*, s.name as service_name FROM quote_requests qr LEFT JOIN services s ON qr.service_id = s.id WHERE qr.id = :id", ['id' => $id]);
     }
 
-    public static function create(array $data): int {
-        Database::execute(
-            "INSERT INTO quote_requests (company_name, contact_name, email, phone, origin_city, destination_city, cargo_type, cargo_weight, cargo_volume, frequency, comments, status, notes) 
-             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-            [
-                $data['company_name'],
-                $data['contact_name'],
-                $data['email'],
-                $data['phone'],
-                $data['origin_city'],
-                $data['destination_city'],
-                $data['cargo_type'],
-                $data['cargo_weight'] ?? '',
-                $data['cargo_volume'] ?? '',
-                $data['frequency'] ?? '',
-                $data['comments'] ?? '',
-                $data['status'] ?? 'pending',
-                $data['notes'] ?? ''
-            ]
-        );
-        return (int)Database::lastInsertId();
+    public static function getAttachments(int $quoteRequestId): array
+    {
+        return DB::select("SELECT * FROM quote_request_attachments WHERE quote_request_id = :quote_request_id", ['quote_request_id' => $quoteRequestId]);
     }
 
-    public static function addAttachment(int $quoteRequestId, array $fileData): int {
-        Database::execute(
-            "INSERT INTO quote_request_attachments (quote_request_id, file_name, file_path, file_size, file_type) VALUES (?, ?, ?, ?, ?)",
-            [
-                $quoteRequestId,
-                $fileData['file_name'],
-                $fileData['file_path'],
-                $fileData['file_size'] ?? 0,
-                $fileData['file_type'] ?? ''
-            ]
-        );
-        return (int)Database::lastInsertId();
+    public static function create(array $data): int
+    {
+        $data['created_at'] = date('Y-m-d H:i:s');
+        $data['updated_at'] = date('Y-m-d H:i:s');
+        $data['status'] = $data['status'] ?? 'nueva';
+        return DB::insert('quote_requests', $data);
     }
 
-    public static function updateStatus(int $id, string $status, ?string $notes = null): bool {
-        return Database::execute(
-            "UPDATE quote_requests SET status = ?, notes = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?",
-            [$status, $notes ?? '', $id]
-        );
+    public static function update(int $id, array $data): int
+    {
+        $data['updated_at'] = date('Y-m-d H:i:s');
+        return DB::update('quote_requests', $data, 'id = :id', ['id' => $id]);
     }
 
-    public static function delete(int $id): bool {
-        return Database::execute("DELETE FROM quote_requests WHERE id = ?", [$id]);
+    public static function delete(int $id): int
+    {
+        DB::delete('quote_request_attachments', 'quote_request_id = :id', ['id' => $id]);
+        return DB::delete('quote_requests', 'id = :id', ['id' => $id]);
+    }
+
+    public static function addAttachment(int $quoteRequestId, array $attachmentData): int
+    {
+        $attachmentData['quote_request_id'] = $quoteRequestId;
+        $attachmentData['created_at'] = date('Y-m-d H:i:s');
+        $attachmentData['updated_at'] = date('Y-m-d H:i:s');
+        return DB::insert('quote_request_attachments', $attachmentData);
     }
 }

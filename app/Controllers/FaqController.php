@@ -2,18 +2,21 @@
 
 namespace App\Controllers;
 
-use Core\Request;
-use Core\View;
 use App\Models\Faq;
 
-class FaqController {
-    public function index(Request $request): string {
-        $faqs = Faq::allActive();
+class FaqController extends Controller
+{
+    public function index()
+    {
+        $faqsRaw = Faq::published();
+        $faqs = [];
+        foreach ($faqsRaw as $faq) {
+            $faqs[$faq['category']][] = $faq;
+        }
 
-        return View::render('faq', [
-            'faqs' => $faqs,
-            'metaTitle' => 'Preguntas Frecuentes — NYG Transporte',
-            'metaDescription' => 'Respuestas a las dudas más comunes sobre nuestros servicios de transporte, cotizaciones y tiempos de entrega.'
-        ]);
+        $metaTitle = 'Preguntas frecuentes — NYG Transporte';
+        $metaDescription = 'Respuestas sobre cobertura, tipos de mercadería, temperatura controlada, seguimiento, almacenamiento y cotizaciones.';
+
+        $this->render('faq', compact('faqs'), $metaTitle, $metaDescription);
     }
 }

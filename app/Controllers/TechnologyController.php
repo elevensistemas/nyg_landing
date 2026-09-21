@@ -2,14 +2,21 @@
 
 namespace App\Controllers;
 
-use Core\Request;
-use Core\View;
+use App\Models\Page;
 
-class TechnologyController {
-    public function show(Request $request): string {
-        return View::render('tecnologia', [
-            'metaTitle' => 'Tecnología y Seguimiento en Tiempo Real — NYG Transporte',
-            'metaDescription' => 'Sistemas de trazabilidad, telemetría y control de flota en tiempo real para máxima visibilidad de tu carga.'
-        ]);
+class TechnologyController extends Controller
+{
+    public function show()
+    {
+        $page = Page::findBySlug('tecnologia-y-seguimiento');
+        if (!$page) {
+            \Flight::notFound();
+            return;
+        }
+
+        $metaTitle = 'Tecnología y seguimiento — NYG Transporte';
+        $metaDescription = 'Seguimiento satelital con recupero, visibilidad de las unidades y control operativo durante toda la operación.';
+
+        $this->render('tecnologia', compact('page'), $metaTitle, $metaDescription);
     }
 }

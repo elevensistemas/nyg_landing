@@ -2,35 +2,32 @@
 
 namespace App\Models;
 
-use Core\Database;
+use App\Helpers\DB;
 
-class Setting {
-    public static function get(string $key, ?string $default = null): ?string {
-        $row = Database::fetchOne("SELECT value FROM settings WHERE key = ?", [$key]);
-        return $row ? $row['value'] : $default;
+class Setting
+{
+    protected static ?array $settings = null;
+
+    public static function all(): array
+    {
+        if (self::$settings === null) {
+            $rows = DB::select("SELECT `key`, `value` FROM settings");
+            self::$settings = [];
+            foreach ($rows as $row) {
+                self::$settings[$row['key']] = $row['value'];
+            }
+        }
+        return self::$settings;
     }
 
-    public static function set(string $key, ?string $value): void {
-        $exists = Database::fetchOne("SELECT id FROM settings WHERE key = ?", [$key]);
-        if ($exists) {
-            Database::execute("UPDATE settings SET value = ?, updated_at = CURRENT_TIMESTAMP WHERE key = ?", [$value, $key]);
-        } else {
-            Database::execute("INSERT INTO settings (key, value) VALUES (?, ?)", [$key, $value]);
-        }
+    public static function get(string $key, mixed $default = null): mixed
+    {
+        return self::all()[$key] ?? $default;
     }
 
-    public static function all(): array {
-        $rows = Database::fetchAll("SELECT * FROM settings");
-        $settings = [];
-        foreach ($rows as $row) {
-            $settings[$row['key']] = $row['value'];
-        }
-        return $settings;
-    }
-
-    public static function updateMany(array $settings): void {
-        foreach ($settings as $key => $val) {
-            self::set($key, $val);
-        }
+    public static function update(string $key, ?string $value): void
+    {
+        DB::update('settings', ['value' => $value], '`key` = :key', ['key' => $key]);
+        self::$settings = null; // Invalidate runtime cache
     }
 }

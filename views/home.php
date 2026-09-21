@@ -1,15 +1,9 @@
 <?php
-$imageMap = [
-    'transporte-terrestre' => asset('images/service-terrestre.jpg'),
-    'cross-docking' => asset('images/service-crossdocking.jpg'),
-    'almacenamiento' => asset('images/service-almacenamiento.jpg'),
-    'distribucion' => asset('images/service-distribucion.jpg'),
-    'cargas-completas' => asset('images/service-completo.jpg'),
-    'servicios-puerta-a-puerta' => asset('images/service-puerta.jpg'),
-];
+use App\Models\Setting;
+use App\Models\Client;
 ?>
 
-<!-- 1. HERO CAROUSEL -->
+<?php // 1. HERO CAROUSEL ?>
 <section class="hero-premium">
     <div class="hero-mouse-glow" aria-hidden="true"></div>
     <div id="heroCarousel" class="carousel slide carousel-fade h-100" data-bs-ride="carousel" data-bs-interval="8000">
@@ -20,7 +14,7 @@ $imageMap = [
         </div>
 
         <div class="carousel-inner h-100">
-            <!-- Slide 1: Logística Integral con Video -->
+            <?php // Slide 1: Tecnología ?>
             <div class="carousel-item active h-100">
                 <div class="hero-slide-premium" style="background-image: url('<?= asset('images/hero-tech.jpg') ?>');">
                     <video autoplay loop muted playsinline class="hero-video-bg">
@@ -42,13 +36,13 @@ $imageMap = [
                 </div>
             </div>
 
-            <!-- Slide 2: Flota -->
+            <?php // Slide 2: Flota ?>
             <div class="carousel-item h-100">
                 <div class="hero-slide-premium" style="background-image: url('<?= asset('images/hero-fleet.jpg') ?>');">
                     <div class="container h-100 d-flex align-items-center">
                         <div class="hero-content">
                             <h1 class="hero-title">Flota de última generación.<br>Eficiencia y precisión.</h1>
-                            <p class="hero-text">Coordinación inteligente para responder de inmediato. Diseñamos e implementamos la operación exacta que tu carga requiere.</p>
+                            <p class="hero-text">Coordinación inteligente para responder de inmediato. Diseñamos e implementamos la operation exacta que tu carga requiere.</p>
                             <div class="hero-buttons">
                                 <a href="<?= route('cotizacion') ?>" class="btn btn-premium-yellow">
                                     Solicitar cotización
@@ -61,7 +55,7 @@ $imageMap = [
                 </div>
             </div>
 
-            <!-- Slide 3: Tranquilidad -->
+            <?php // Slide 3: Tranquilidad ?>
             <div class="carousel-item h-100">
                 <div class="hero-slide-premium" style="background-image: url('<?= asset('images/mapa_argentina_red.jpg') ?>');">
                     <div class="container h-100 d-flex align-items-center">
@@ -83,7 +77,7 @@ $imageMap = [
     </div>
 </section>
 
-<!-- 2. BANDA DE DIFERENCIALES -->
+<?php // 2. BANDA DE DIFERENCIALES ?>
 <section class="diferenciales-strip">
     <div class="container">
         <div class="diferenciales-container">
@@ -164,7 +158,7 @@ $imageMap = [
     </div>
 </section>
 
-<!-- 3. SERVICIOS PRINCIPALES -->
+<?php // 3. SERVICIOS PRINCIPALES ?>
 <section id="servicios" class="section-dark section-services" data-animate>
     <div class="container">
         <div class="row justify-content-center text-center mb-5">
@@ -176,34 +170,43 @@ $imageMap = [
         </div>
 
         <div class="row g-4 justify-content-center">
-            <?php if (!empty($services)): ?>
-                <?php foreach (array_slice($services, 0, 6) as $service): ?>
-                    <?php 
-                        $storageFile = !empty($service['cover_image']) ? __DIR__ . '/../public/storage/' . ltrim($service['cover_image'], '/') : '';
-                        $hasStorageImg = $storageFile && file_exists($storageFile);
-                        $imgUrl = $hasStorageImg 
-                            ? asset('storage/' . ltrim($service['cover_image'], '/')) 
-                            : ($imageMap[$service['slug']] ?? asset('images/hero-fleet.jpg'));
-                    ?>
-                    <div class="col-lg-4 col-md-6">
-                        <div class="service-card-compact">
-                            <div class="service-img-wrapper">
-                                <img src="<?= e($imgUrl) ?>" alt="<?= e($service['title']) ?>" loading="lazy">
+            <?php 
+            $imageMap = [
+                'transporte-terrestre' => asset('images/service-terrestre.jpg'),
+                'cross-docking' => asset('images/service-crossdocking.jpg'),
+                'almacenamiento' => asset('images/service-almacenamiento.jpg'),
+                'distribucion' => asset('images/service-distribucion.jpg'),
+                'cargas-completas' => asset('images/service-completo.jpg'),
+                'servicios-puerta-a-puerta' => asset('images/service-puerta.jpg'),
+            ];
+            
+            $limitServices = array_slice($allServices, 0, 6);
+            if (!empty($limitServices)): 
+                foreach ($limitServices as $service): 
+                    // Use updated cover_image resolution logic
+                    $imgUrl = $service['cover_image'] ? asset('storage/' . $service['cover_image']) : ($imageMap[$service['slug']] ?? asset('images/hero-fleet.jpg'));
+            ?>
+                <div class="col-lg-4 col-md-6">
+                    <div class="service-card-compact">
+                        <div class="service-img-wrapper">
+                            <img src="<?= $imgUrl ?>" alt="<?= htmlspecialchars($service['name']) ?>" loading="lazy">
+                        </div>
+                        <div class="service-body">
+                            <div>
+                                <h3><?= htmlspecialchars($service['name']) ?></h3>
+                                <p><?= htmlspecialchars($service['short_description']) ?></p>
                             </div>
-                            <div class="service-body">
-                                <div>
-                                    <h3><?= e($service['title']) ?></h3>
-                                    <p><?= e($service['summary'] ?? '') ?></p>
-                                </div>
-                                <a href="<?= route('servicios.show', ['servicio' => $service['slug']]) ?>" class="service-link">
-                                    Ver detalles
-                                    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
-                                </a>
-                            </div>
+                            <a href="<?= route('servicios.show', ['servicio' => $service['slug']]) ?>" class="service-link">
+                                Ver detalles
+                                <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+                            </a>
                         </div>
                     </div>
-                <?php endforeach; ?>
-            <?php else: ?>
+                </div>
+            <?php 
+                endforeach;
+            else: 
+            ?>
                 <div class="col-12 text-center text-white-50">
                     <p>No hay servicios disponibles actualmente.</p>
                 </div>
@@ -212,7 +215,7 @@ $imageMap = [
     </div>
 </section>
 
-<!-- 4. PROCESO LOGÍSTICO CIRCULAR -->
+<?php // 4. PROCESO LOGÍSTICO CIRCULAR ?>
 <section id="operaciones" class="section-dark section-operations">
     <div class="operations-bg-grid" aria-hidden="true"></div>
 
@@ -270,7 +273,7 @@ $imageMap = [
                                 </div>
                             </div>
 
-                            <!-- Center: Orbits, Glowing Dot, Circular Buttons and Truck Core -->
+                            <!-- Center -->
                             <div class="process-center-circle-area">
                                 <svg class="process-orbits-svg-new" viewBox="0 0 500 500">
                                     <circle cx="250" cy="250" r="220" class="orbit-line-new outer" />
@@ -316,9 +319,10 @@ $imageMap = [
                                     </div>
                                 </div>
 
+                                <!-- Central Core -->
                                 <div class="process-center-core-new">
                                     <div class="center-glow-radial"></div>
-                                    <img src="<?= asset('images/IMG_6178.PNG') ?>" alt="NYG" class="core-brand-logo mb-2">
+                                    <img src="<?= asset('images/logo-nyg.png') ?>" alt="NYG" class="core-brand-logo mb-2">
                                     <div class="core-text-block-new text-center">
                                         <span class="core-txt-white">Operación logística</span>
                                         <span class="core-txt-yellow">bajo control</span>
@@ -365,7 +369,75 @@ $imageMap = [
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                    </div>
 
+                    <?php // Versión Móvil ?>
+                    <div class="logistics-process-mobile d-flex d-lg-none">
+                        <div class="mobile-timeline-line">
+                            <div class="mobile-glowing-dot" id="mobile-dot"></div>
+                        </div>
+                        
+                        <div class="mobile-steps-list text-start">
+                            <div class="mobile-step-item" data-step="1" id="mobile-step-1">
+                                <div class="mobile-step-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/></svg>
+                                </div>
+                                <div class="mobile-step-content">
+                                    <span class="mobile-step-num">01 Solicitud</span>
+                                    <p class="mobile-step-desc">Recibimos la necesidad del cliente y analizamos origen, destino, volumen y condiciones especiales.</p>
+                                </div>
+                            </div>
+
+                            <div class="mobile-step-item" data-step="2" id="mobile-step-2">
+                                <div class="mobile-step-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><line x1="9" x2="9" y1="3" y2="18"/><line x1="15" x2="15" y1="6" y2="21"/></svg>
+                                </div>
+                                <div class="mobile-step-content">
+                                    <span class="mobile-step-num">02 Planificación</span>
+                                    <p class="mobile-step-desc">Diseñamos la ruta, estimamos tiempos y organizamos la operación.</p>
+                                </div>
+                            </div>
+
+                            <div class="mobile-step-item" data-step="3" id="mobile-step-3">
+                                <div class="mobile-step-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="2" ry="2"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+                                </div>
+                                <div class="mobile-step-content">
+                                    <span class="mobile-step-num">03 Asignación</span>
+                                    <p class="mobile-step-desc">Seleccionamos el vehículo y el equipo operativo ideal para la carga.</p>
+                                </div>
+                            </div>
+
+                            <div class="mobile-step-item" data-step="4" id="mobile-step-4">
+                                <div class="mobile-step-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/><path d="M2 12h20"/></svg>
+                                </div>
+                                <div class="mobile-step-content">
+                                    <span class="mobile-step-num">04 Seguimiento</span>
+                                    <p class="mobile-step-desc">Monitoreamos el envío mediante GPS durante toda la operación.</p>
+                                </div>
+                            </div>
+
+                            <div class="mobile-step-item" data-step="5" id="mobile-step-5">
+                                <div class="mobile-step-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.29 7 12 12 20.71 7"/><line x1="12" x2="12" y1="22" y2="12"/></svg>
+                                </div>
+                                <div class="mobile-step-content">
+                                    <span class="mobile-step-num">05 Entrega</span>
+                                    <p class="mobile-step-desc">Coordinamos el arribo y verificamos la recepción en destino.</p>
+                                </div>
+                            </div>
+
+                            <div class="mobile-step-item" data-step="6" id="mobile-step-6">
+                                <div class="mobile-step-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+                                </div>
+                                <div class="mobile-step-content">
+                                    <span class="mobile-step-num">06 Confirmación</span>
+                                    <p class="mobile-step-desc">Registramos la entrega y generamos la trazabilidad completa.</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -374,8 +446,87 @@ $imageMap = [
     </div>
 </section>
 
-<!-- 5. CLIENTES -->
-<?php if (!empty($clients)): ?>
+<?php // 5. TECNOLOGÍA APLICADA EN CADA ETAPA ?>
+<section id="tecnologia" class="section-dark section-merged-tech" data-animate>
+    <div class="container">
+        <div class="row g-5 align-items-center">
+            <div class="col-lg-5 text-start">
+                <span class="eyebrow eyebrow-yellow">Flujo de Trabajo</span>
+                <h2 class="section-title text-white">Tecnología aplicada en cada etapa</h2>
+                <p class="lead-text text-white-50 mb-4" style="font-size: 1.05rem;">
+                    Planificamos, monitoreamos y documentamos cada operación para ofrecer visibilidad, respuesta y control durante todo el proceso.
+                </p>
+
+                <div class="compact-flow-container">
+                    <div class="flow-step-item active">
+                        <div class="step-circle">1</div>
+                        <span class="step-label">Solicitud</span>
+                    </div>
+                    <div class="flow-step-item">
+                        <div class="step-circle">2</div>
+                        <span class="step-label">Planificación</span>
+                    </div>
+                    <div class="flow-step-item">
+                        <div class="step-circle">3</div>
+                        <span class="step-label">Seguimiento</span>
+                    </div>
+                    <div class="flow-step-item">
+                        <div class="step-circle">4</div>
+                        <span class="step-label">Entrega</span>
+                    </div>
+                    <div class="flow-step-item">
+                        <div class="step-circle">5</div>
+                        <span class="step-label">Confirmación</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-7">
+                <div class="tech-capabilities-list">
+                    <div class="capability-item">
+                        <span class="capability-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+                        </span>
+                        <div>
+                            <h4>Seguimiento Satelital</h4>
+                            <p>Visualización directa y continua de tu mercadería con geocercas activas.</p>
+                        </div>
+                    </div>
+                    <div class="capability-item">
+                        <span class="capability-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+                        </span>
+                        <div>
+                            <h4>Reportes Operativos</h4>
+                            <p>Estadísticas del estado de las entregas y tiempos de tránsito del servicio.</p>
+                        </div>
+                    </div>
+                    <div class="capability-item">
+                        <span class="capability-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1 .4-1 1v10c0 .6.4 1 1 1h2"/><circle cx="18.5" cy="17.5" r="2.5"/><circle cx="8.5" cy="17.5" r="2.5"/></svg>
+                        </span>
+                        <div>
+                            <h4>Gestión de Flota</h4>
+                            <p>Asignación automatizada de vehículos según el volumen y requerimientos de carga.</p>
+                        </div>
+                    </div>
+                    <div class="capability-item">
+                        <span class="capability-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/><path d="M2 12h20"/></svg>
+                        </span>
+                        <div>
+                            <h4>Central de Monitoreo</h4>
+                            <p>Equipo exclusivo controlando trayectos y alertas críticas en tiempo real.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<?php // 7. CLIENTES ?>
+<?php if(!empty($clients)): ?>
 <section class="section-dark section-clients py-5" data-animate>
     <div class="container">
         <div class="row justify-content-center text-center mb-4">
@@ -386,14 +537,11 @@ $imageMap = [
         </div>
 
         <div class="logo-groups-wrapper">
-            <?php 
-            $chunks = array_chunk($clients, 6);
-            foreach ($chunks as $index => $group): 
-            ?>
-                <div class="logos-fade-group <?= $index === 0 ? 'active' : '' ?>" id="logo-group-<?= $index + 1 ?>" style="<?= $index > 0 ? 'display: none;' : 'display: flex;' ?>">
-                    <?php foreach ($group as $client): ?>
+            <?php foreach(array_chunk($clients, 6) as $index => $group): ?>
+                <div class="logos-fade-group <?= ($index === 0) ? 'active' : '' ?>" id="logo-group-<?= $index + 1 ?>" style="<?= ($index > 0) ? 'display: none;' : 'display: flex;' ?>">
+                    <?php foreach($group as $client): ?>
                         <div class="logo-fade-item">
-                            <img src="<?= e(client_logo_url($client)) ?>" alt="Logo de <?= e($client['name']) ?>" class="client-fade-logo" loading="lazy">
+                            <img src="<?= htmlspecialchars(Client::getLogoUrl($client['logo_path'])) ?>" alt="Logo de <?= htmlspecialchars($client['name']) ?>" class="client-fade-logo" loading="lazy">
                         </div>
                     <?php endforeach; ?>
                 </div>
@@ -403,7 +551,7 @@ $imageMap = [
 </section>
 <?php endif; ?>
 
-<!-- 6. CTA FINAL -->
+<?php // 8. CTA FINAL ?>
 <section class="section-cta-premium" style="background-image: url('<?= asset('images/camion.png') ?>');" data-animate>
     <div class="container">
         <div class="cta-content-wrapper text-start">
@@ -418,10 +566,10 @@ $imageMap = [
                 </a>
                 
                 <?php
-                    $whatsappNumber = \App\Models\Setting::get('whatsapp_number', '5491100000000');
-                    $whatsappHref = 'https://wa.me/'.$whatsappNumber.'?text='.rawurlencode('Hola, quisiera solicitar información sobre transporte.');
+                $whatsappNumber = Setting::get('whatsapp_number', '5491130091907');
+                $whatsappHref = 'https://wa.me/'.$whatsappNumber.'?text='.rawurlencode('Hola, quisiera solicitar información sobre transporte.');
                 ?>
-                <a href="<?= e($whatsappHref) ?>" target="_blank" rel="noopener" class="btn-whatsapp-cta">
+                <a href="<?= $whatsappHref ?>" target="_blank" rel="noopener" class="btn-whatsapp-cta">
                     <svg class="me-2" width="18" height="18" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.9 7.9 0 0 0 3.79.977h.004c4.368 0 7.927-3.558 7.93-7.93a7.9 7.9 0 0 0-2.327-5.615zM7.994 14.52a6.6 6.6 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.56 6.56 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592m3.69-4.294c-.198-.099-1.17-.578-1.353-.646-.183-.069-.317-.099-.45.1-.132.197-.512.647-.628.78-.117.13-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.117-.198-.011-.304.088-.403.09-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.251-.015-.35-.052-.099-.45-1.08-.616-1.482-.163-.396-.327-.342-.45-.349-.117-.007-.252-.007-.388-.007a.77.77 0 0 0-.559.258c-.185.205-.705.69-.705 1.685s.722 1.956.823 2.093c.1.137 1.42 2.167 3.437 3.033.48.207.854.33 1.147.424.484.153.924.13 1.272.079.388-.058 1.17-.479 1.334-.941.164-.462.164-.859.115-.941-.05-.082-.18-.131-.379-.23"/></svg>
                     WhatsApp
                 </a>

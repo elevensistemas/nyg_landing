@@ -2,42 +2,36 @@
 
 namespace App\Models;
 
-use Core\Database;
+use App\Helpers\DB;
 
-class ContactRequest {
-    public static function all(): array {
-        return Database::fetchAll("SELECT * FROM contact_requests ORDER BY created_at DESC");
+class ContactRequest
+{
+    public static function all(): array
+    {
+        return DB::select("SELECT * FROM contact_requests ORDER BY created_at DESC");
     }
 
-    public static function find(int $id): ?array {
-        return Database::fetchOne("SELECT * FROM contact_requests WHERE id = ?", [$id]);
+    public static function find(int $id): ?array
+    {
+        return DB::selectOne("SELECT * FROM contact_requests WHERE id = :id", ['id' => $id]);
     }
 
-    public static function create(array $data): int {
-        Database::execute(
-            "INSERT INTO contact_requests (name, email, phone, company, subject, message, status, notes) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
-            [
-                $data['name'],
-                $data['email'],
-                $data['phone'] ?? '',
-                $data['company'] ?? '',
-                $data['subject'] ?? '',
-                $data['message'],
-                $data['status'] ?? 'pending',
-                $data['notes'] ?? ''
-            ]
-        );
-        return (int)Database::lastInsertId();
+    public static function create(array $data): int
+    {
+        $data['created_at'] = date('Y-m-d H:i:s');
+        $data['updated_at'] = date('Y-m-d H:i:s');
+        $data['status'] = $data['status'] ?? 'nueva';
+        return DB::insert('contact_requests', $data);
     }
 
-    public static function updateStatus(int $id, string $status, ?string $notes = null): bool {
-        return Database::execute(
-            "UPDATE contact_requests SET status = ?, notes = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?",
-            [$status, $notes ?? '', $id]
-        );
+    public static function update(int $id, array $data): int
+    {
+        $data['updated_at'] = date('Y-m-d H:i:s');
+        return DB::update('contact_requests', $data, 'id = :id', ['id' => $id]);
     }
 
-    public static function delete(int $id): bool {
-        return Database::execute("DELETE FROM contact_requests WHERE id = ?", [$id]);
+    public static function delete(int $id): int
+    {
+        return DB::delete('contact_requests', 'id = :id', ['id' => $id]);
     }
 }

@@ -2,34 +2,78 @@
 
 namespace App\Controllers\Admin;
 
-use Core\Request;
-use Core\View;
-use Core\Response;
-use Core\Auth;
+use App\Controllers\Controller;
+use App\Models\User;
 
-class AuthController {
-    public function showLogin(Request $request): string {
-        return View::render('admin.auth.login', [
-            'metaTitle' => 'Iniciar Sesión — Panel Administrativo NYG'
-        ], 'layouts/admin');
-    }
-
-    public function login(Request $request): void {
-        $email = trim((string)$request->input('email'));
-        $password = trim((string)$request->input('password'));
-
-        if (Auth::attempt($email, $password)) {
-            flash('success', '¡Bienvenido al Panel Administrativo!');
-            Response::redirect('/admin');
-        } else {
-            flash('error', 'Credenciales incorrectas. Por favor verifica tu email y contraseña.');
-            Response::redirect('/admin/login');
+class AuthController extends Controller
+{
+    public function showLogin()
+    {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
         }
+        if (!empty($_SESSION['admin_user'])) {
+            \Flight::redirect(route('admin.dashboard'));
+            return;
+        }
+
+        \Flight::render('admin/auth/login');
     }
 
-    public function logout(Request $request): void {
-        Auth::logout();
-        flash('success', 'Has cerrado sesión correctamente.');
-        Response::redirect('/admin/login');
+    public function login()
+    {
+        $data = \Flight::request()->data;
+        $errors = [];
+
+        $email = trim($data->email ?? '');
+        $password = trim($data->password ?? '');
+
+        if (empty($email)) {
+            $errors[] = 'Ingresá tu correo electrónico.';
+        }
+        if (empty($password)) {
+            $errors[] = 'Ingresá tu contraseña.';
+        }
+
+        if (empty($errors)) {
+            $user = User::findByEmail($email);
+            if ($user && User::verifyPassword($password, $user['password'])) {
+                if (!empty($user['is_admin'])) {
+                    if (session_status() === PHP_SESSION_NONE) {
+                        session_start();
+                    }
+                    $_SESSION['admin_user'] = [
+                        'id' => $user['id'],
+                        'name' => $user['name'],
+                        'email' => $user['email']
+                    ];
+                    \Flight::redirect(route('admin.dashboard'));
+                    return;
+                } else {
+                    $errors[] = 'Este usuario no tiene permisos de administrador.';
+                }
+            } else {
+                $errors[] = 'Las credenciales no coinciden con ningún administrador.';
+            }
+        }
+
+        $_SESSION['_errors'] = $errors;
+        $_SESSION['_old'] = ['email' => $email];
+        \Flight::redirect(route('admin.login'));
+    }
+
+    public function logout()
+    {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        unset($_SESSION['admin_user']);
+        session_destroy();
+
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        unset($_SESSION['_token']);
+        \Flight::redirect(route('admin.login'));
     }
 }

@@ -2,38 +2,48 @@
 
 namespace App\Controllers;
 
-use Core\Request;
-use Core\View;
-use Core\Response;
 use App\Models\Service;
 use App\Models\ServiceCategory;
+use App\Helpers\DB;
 
-class ServiceController {
-    public function index(Request $request): string {
-        $services = Service::allActive();
-        $categories = ServiceCategory::allActive();
+class ServiceController extends Controller
+{
+    public function index()
+    {
+        $categories = ServiceCategory::published();
+        
+        foreach ($categories as &$category) {
+            $category['services'] = Service::getByCategory($category['id']);
+        }
+        unset($category);
 
-        return View::render('servicios.index', [
-            'services' => $services,
-            'categories' => $categories,
-            'metaTitle' => 'Servicios de Logística y Transporte — NYG Transporte',
-            'metaDescription' => 'Transporte terrestre, almacenamiento, distribución y gestión de logística adaptada a las necesidades de tu empresa.'
-        ]);
+        $this->render('servicios/index', compact('categories'));
     }
 
-    public function show(Request $request, string $slug): string {
-        $service = Service::findBySlug($slug);
-        if (!$service) {
-            Response::notFound('El servicio solicitado no existe.');
+    public function show(string $servicioSlug)
+    {
+        $service = Service::findBySlug($servicioSlug);
+        if (!$service || empty($service['is_published'])) {
+            \Flight::notFound();
+            return;
         }
 
-        $allServices = Service::allActive();
+        $categoryId = $service['service_category_id'];
+        $serviceId = $service['id'];
+        
+        $related = DB::select("
+            SELECT * FROM services 
+            WHERE is_published = 1 
+              AND id != :service_id 
+              AND service_category_id = :category_id 
+              AND deleted_at IS NULL 
+            ORDER BY `order` ASC, `name` ASC 
+            LIMIT 3
+        ", ['service_id' => $serviceId, 'category_id' => $categoryId]);
 
-        return View::render('servicios.show', [
+        $this->render('servicios/show', [
             'service' => $service,
-            'allServices' => $allServices,
-            'metaTitle' => $service['title'] . ' — NYG Transporte',
-            'metaDescription' => $service['summary'] ?? $service['title']
-        ]);
+            'related' => $related
+        ], $service['name'] . ' — NYG Transporte', $service['short_description']);
     }
 }

@@ -1,33 +1,32 @@
-<div class="h4 text-white mb-4">Solicitudes de Cotización</div>
+<form method="GET" class="d-flex gap-2 mb-3">
+    <input type="search" name="q" class="form-control" placeholder="Buscar por nombre, empresa o correo..." value="<?= htmlspecialchars($_GET['q'] ?? '') ?>">
+    <select name="status" class="form-select" style="max-width:220px;">
+        <option value="">Todos los estados</option>
+        <?php foreach($statuses as $key => $label): ?>
+            <option value="<?= htmlspecialchars($key) ?>" <?= ($_GET['status'] ?? '') === $key ? 'selected' : '' ?>><?= htmlspecialchars($label) ?></option>
+        <?php endforeach; ?>
+    </select>
+    <button class="btn btn-outline-dark" type="submit">Filtrar</button>
+</form>
 
-<div class="table-responsive rounded-4 border border-secondary bg-dark text-start">
-    <table class="table table-dark table-hover mb-0 align-middle">
-        <thead>
-            <tr>
-                <th>Empresa / Contacto</th>
-                <th>Trayecto</th>
-                <th>Tipo de Carga</th>
-                <th>Estado</th>
-                <th>Fecha</th>
-                <th class="text-end">Acción</th>
-            </tr>
-        </thead>
+<div class="table-responsive">
+    <table class="table admin-table">
+        <thead><tr><th>Fecha</th><th>Nombre</th><th>Empresa</th><th>Servicio</th><th>Estado</th><th></th></tr></thead>
         <tbody>
-            <?php foreach ($quoteRequests as $q): ?>
-                <tr>
-                    <td>
-                        <strong class="text-white d-block"><?= e($q['company_name']) ?></strong>
-                        <small class="text-white-50"><?= e($q['contact_name']) ?> (<?= e($q['phone']) ?>)</small>
-                    </td>
-                    <td><?= e($q['origin_city']) ?> &rarr; <?= e($q['destination_city']) ?></td>
-                    <td><?= e($q['cargo_type']) ?></td>
-                    <td><span class="badge bg-warning text-dark"><?= e($q['status']) ?></span></td>
-                    <td class="small text-white-50"><?= e($q['created_at']) ?></td>
-                    <td class="text-end">
-                        <a href="/admin/quote-requests/<?= $q['id'] ?>" class="btn btn-sm btn-warning fw-bold">Ver detalle</a>
-                    </td>
-                </tr>
-            <?php endforeach; ?>
+            <?php if(!empty($quotes)): ?>
+                <?php foreach($quotes as $quote): ?>
+                    <tr class="<?= !empty($quote['read_at']) ? '' : 'fw-bold' ?>">
+                        <td><?= date('d/m/Y H:i', strtotime($quote['created_at'])) ?></td>
+                        <td><?= htmlspecialchars($quote['full_name']) ?></td>
+                        <td><?= htmlspecialchars($quote['company'] ?? '—') ?></td>
+                        <td><?= htmlspecialchars($quote['service_name'] ?? $quote['service_type_other'] ?? '—') ?></td>
+                        <td><span class="badge-status"><?= htmlspecialchars($statuses[$quote['status']] ?? $quote['status']) ?></span></td>
+                        <td><a href="<?= route('admin.quote-requests.show', ['id' => $quote['id']]) ?>">Ver</a></td>
+                    </tr>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <tr><td colspan="6">No hay solicitudes de cotización.</td></tr>
+            <?php endif; ?>
         </tbody>
     </table>
 </div>

@@ -2,51 +2,40 @@
 
 namespace App\Controllers;
 
-use Core\Request;
-use Core\Response;
-use App\Models\Service;
 use App\Models\LegalPage;
+use App\Models\Service;
 
-class SitemapController {
-    public function index(Request $request): void {
-        $services = Service::allActive();
-        $legalPages = LegalPage::allActive();
-
-        header('Content-Type: application/xml; charset=utf-8');
-
-        $xml = '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
-        $xml .= '<urlset xmlns="http://www.sitemap.org/schemas/sitemap/0.9">' . "\n";
-
+class SitemapController extends Controller
+{
+    public function index()
+    {
         $urls = [
-            url('/'),
-            url('/empresa'),
-            url('/servicios'),
-            url('/tecnologia-y-seguimiento'),
-            url('/clientes'),
-            url('/preguntas-frecuentes'),
-            url('/contacto'),
-            url('/cotizacion'),
+            ['loc' => route('home'), 'priority' => '1.0'],
+            ['loc' => route('empresa'), 'priority' => '0.8'],
+            ['loc' => route('servicios.index'), 'priority' => '0.9'],
+            ['loc' => route('tecnologia'), 'priority' => '0.7'],
+            ['loc' => route('clientes'), 'priority' => '0.6'],
+            ['loc' => route('faq'), 'priority' => '0.6'],
+            ['loc' => route('contacto'), 'priority' => '0.9'],
         ];
 
-        foreach ($services as $service) {
-            $urls[] = url('/servicios/' . $service['slug']);
+        $services = Service::published();
+        foreach ($services as $s) {
+            $urls[] = [
+                'loc' => route('servicios.show', ['servicio' => $s['slug']]),
+                'priority' => '0.8'
+            ];
         }
 
-        foreach ($legalPages as $page) {
-            $urls[] = url('/legales/' . $page['slug']);
+        $legalPages = LegalPage::published();
+        foreach ($legalPages as $p) {
+            $urls[] = [
+                'loc' => route('legal.show', ['legal' => $p['slug']]),
+                'priority' => '0.3'
+            ];
         }
 
-        foreach ($urls as $u) {
-            $xml .= '  <url>' . "\n";
-            $xml .= '    <loc>' . e($u) . '</loc>' . "\n";
-            $xml .= '    <changefreq>weekly</changefreq>' . "\n";
-            $xml .= '    <priority>0.8</priority>' . "\n";
-            $xml .= '  </url>' . "\n";
-        }
-
-        $xml .= '</urlset>';
-
-        echo $xml;
-        exit;
+        header('Content-Type: text/xml; charset=utf-8');
+        \Flight::render('sitemap', ['urls' => $urls]);
     }
 }

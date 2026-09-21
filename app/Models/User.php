@@ -2,22 +2,22 @@
 
 namespace App\Models;
 
-use Core\Database;
+use App\Helpers\DB;
 
-class User {
-    public static function find(int $id): ?array {
-        return Database::fetchOne("SELECT * FROM users WHERE id = ?", [$id]);
+class User
+{
+    public static function findByEmail(string $email): ?array
+    {
+        return DB::selectOne("SELECT * FROM users WHERE email = :email LIMIT 1", ['email' => $email]);
     }
 
-    public static function findByEmail(string $email): ?array {
-        return Database::fetchOne("SELECT * FROM users WHERE email = ?", [$email]);
+    public static function find(int $id): ?array
+    {
+        return DB::selectOne("SELECT * FROM users WHERE id = :id LIMIT 1", ['id' => $id]);
     }
 
-    public static function create(array $data): int {
-        Database::execute(
-            "INSERT INTO users (name, email, password) VALUES (?, ?, ?)",
-            [$data['name'], $data['email'], password_hash($data['password'], PASSWORD_BCRYPT)]
-        );
-        return (int)Database::lastInsertId();
+    public static function verifyPassword(string $password, string $hash): bool
+    {
+        return password_verify($password, $hash);
     }
 }

@@ -2,49 +2,55 @@
 
 namespace App\Controllers\Admin;
 
-use Core\Request;
-use Core\View;
-use Core\Response;
 use App\Models\LegalPage;
 
-class LegalPageController {
-    public function index(Request $request): string {
-        return View::render('admin.legal-pages.index', [
-            'legalPages' => LegalPage::all(),
-            'metaTitle' => 'Páginas Legales — CMS NYG'
-        ], 'layouts/admin');
+class LegalPageController extends AdminController
+{
+    public function index()
+    {
+        $pages = LegalPage::all();
+
+        $this->renderAdmin('admin/legal-pages/index', compact('pages'), 'Páginas legales');
     }
 
-    public function edit(Request $request, int $id): string {
+    public function edit(int $id)
+    {
         $page = LegalPage::find($id);
         if (!$page) {
-            Response::notFound('Página legal no encontrada.');
+            \Flight::notFound();
+            return;
         }
 
-        return View::render('admin.legal-pages.edit', [
-            'page' => $page,
-            'metaTitle' => 'Editar ' . $page['title'] . ' — CMS NYG'
-        ], 'layouts/admin');
+        $this->renderAdmin('admin/legal-pages/form', compact('page'), 'Editar página legal');
     }
 
-    public function update(Request $request, int $id): void {
-        $title = trim((string)$request->input('title'));
-        $content = (string)$request->input('content');
-
-        if (!empty($title) && !empty($content)) {
-            LegalPage::update($id, [
-                'title' => $title,
-                'slug' => $request->input('slug'),
-                'content' => $content,
-                'meta_title' => $request->input('meta_title', $title),
-                'meta_description' => $request->input('meta_description', ''),
-                'is_active' => $request->input('is_active', 1) ? 1 : 0
-            ]);
-            flash('success', 'Página legal actualizada.');
-        } else {
-            flash('error', 'Título y contenido son requeridos.');
+    public function update(int $id)
+    {
+        $page = LegalPage::find($id);
+        if (!$page) {
+            \Flight::notFound();
+            return;
         }
 
-        Response::redirect('/admin/legal-pages');
+        $data = \Flight::request()->data;
+        $title = trim($data->title ?? '');
+        $content = trim($data->content ?? '');
+        $is_published = !empty($data->is_published) ? 1 : 0;
+
+        if (empty($title) || empty($content)) {
+            $_SESSION['error'] = 'El título y el contenido son obligatorios.';
+            \Flight::redirect(route('admin.legal-pages.edit', ['id' => $id]));
+            return;
+        }
+
+        LegalPage::update($id, [
+            'title' => $title,
+            'content' => $content,
+            'is_published' => $is_published,
+            'last_reviewed_at' => date('Y-m-d H:i:s')
+        ]);
+
+        $_SESSION['success'] = 'Página legal actualizada.';
+        \Flight::redirect(route('admin.legal-pages.index'));
     }
 }

@@ -1,85 +1,67 @@
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <h2 class="text-white h4 mb-0">Detalle de Cotización #<?= $quoteRequest['id'] ?></h2>
-    <a href="/admin/quote-requests" class="btn btn-outline-light btn-sm">Volver</a>
-</div>
+<div class="row g-4">
+    <div class="col-lg-8">
+        <div class="admin-detail-card">
+            <h2 class="h5">Datos de contacto</h2>
+            <dl class="row">
+                <dt class="col-sm-3">Nombre</dt><dd class="col-sm-9"><?= htmlspecialchars($quote['full_name']) ?></dd>
+                <dt class="col-sm-3">Empresa</dt><dd class="col-sm-9"><?= htmlspecialchars($quote['company'] ?? '—') ?></dd>
+                <dt class="col-sm-3">Correo</dt><dd class="col-sm-9"><a href="mailto:<?= htmlspecialchars($quote['email']) ?>"><?= htmlspecialchars($quote['email']) ?></a></dd>
+                <dt class="col-sm-3">Teléfono</dt><dd class="col-sm-9"><?= htmlspecialchars($quote['phone']) ?></dd>
+            </dl>
 
-<div class="row g-4 text-start">
-    <div class="col-md-8">
-        <div class="p-4 rounded-4 border border-secondary bg-dark text-white">
-            <h3 class="h5 text-warning mb-3">Información del Cliente y Operación</h3>
-            <div class="row g-3">
-                <div class="col-md-6">
-                    <strong class="text-white-50 d-block">Empresa:</strong>
-                    <span class="fs-5 text-white"><?= e($quoteRequest['company_name']) ?></span>
-                </div>
-                <div class="col-md-6">
-                    <strong class="text-white-50 d-block">Contacto:</strong>
-                    <span class="fs-5 text-white"><?= e($quoteRequest['contact_name']) ?></span>
-                </div>
-                <div class="col-md-6">
-                    <strong class="text-white-50 d-block">Email:</strong>
-                    <a href="mailto:<?= e($quoteRequest['email']) ?>" class="text-warning"><?= e($quoteRequest['email']) ?></a>
-                </div>
-                <div class="col-md-6">
-                    <strong class="text-white-50 d-block">Teléfono:</strong>
-                    <span class="text-white"><?= e($quoteRequest['phone']) ?></span>
-                </div>
-                <div class="col-md-6">
-                    <strong class="text-white-50 d-block">Origen:</strong>
-                    <span class="text-white"><?= e($quoteRequest['origin_city']) ?></span>
-                </div>
-                <div class="col-md-6">
-                    <strong class="text-white-50 d-block">Destino:</strong>
-                    <span class="text-white"><?= e($quoteRequest['destination_city']) ?></span>
-                </div>
-                <div class="col-md-6">
-                    <strong class="text-white-50 d-block">Tipo de Carga:</strong>
-                    <span class="text-white"><?= e($quoteRequest['cargo_type']) ?></span>
-                </div>
-                <div class="col-md-6">
-                    <strong class="text-white-50 d-block">Frecuencia:</strong>
-                    <span class="text-white"><?= e($quoteRequest['frequency'] ?: 'N/A') ?></span>
-                </div>
-                <div class="col-12 mt-3">
-                    <strong class="text-white-50 d-block">Comentarios:</strong>
-                    <p class="p-3 rounded-3 bg-secondary bg-opacity-25 text-white mt-1 mb-0"><?= e($quoteRequest['comments'] ?: 'Sin comentarios') ?></p>
-                </div>
-                <?php if (!empty($quoteRequest['attachments'])): ?>
-                    <div class="col-12 mt-3">
-                        <strong class="text-white-50 d-block">Archivos Adjuntos:</strong>
-                        <?php foreach ($quoteRequest['attachments'] as $att): ?>
-                            <a href="<?= e($att['file_path']) ?>" target="_blank" class="btn btn-sm btn-outline-warning mt-2">
-                                📎 <?= e($att['file_name']) ?>
-                            </a>
-                        <?php foreach; ?>
-                    </div>
-                <?php endif; ?>
-            </div>
+            <h2 class="h5">Detalle de la operación</h2>
+            <dl class="row">
+                <dt class="col-sm-3">Servicio</dt><dd class="col-sm-9"><?= htmlspecialchars($quote['service_name'] ?? $quote['service_type_other'] ?? '—') ?></dd>
+                <dt class="col-sm-3">Origen</dt><dd class="col-sm-9"><?= htmlspecialchars($quote['origin'] ?? '—') ?></dd>
+                <dt class="col-sm-3">Destino</dt><dd class="col-sm-9"><?= htmlspecialchars($quote['destination'] ?? '—') ?></dd>
+                <dt class="col-sm-3">Mercadería</dt><dd class="col-sm-9"><?= htmlspecialchars($quote['cargo_type'] ?? '—') ?></dd>
+                <dt class="col-sm-3">Temperatura</dt><dd class="col-sm-9"><?= !empty($quote['requires_temperature_control']) ? htmlspecialchars($quote['temperature_requirement'] ?? 'Sí') : 'No' ?></dd>
+                <dt class="col-sm-3">Peso aprox.</dt><dd class="col-sm-9"><?= !empty($quote['approx_weight_kg']) ? htmlspecialchars($quote['approx_weight_kg']) . ' kg' : '—' ?></dd>
+                <dt class="col-sm-3">Volumen aprox.</dt><dd class="col-sm-9"><?= !empty($quote['approx_volume_m3']) ? htmlspecialchars($quote['approx_volume_m3']) . ' m³' : '—' ?></dd>
+                <dt class="col-sm-3">Pallets/bultos</dt><dd class="col-sm-9"><?= htmlspecialchars($quote['pallets_or_packages'] ?? '—') ?></dd>
+                <dt class="col-sm-3">Frecuencia</dt><dd class="col-sm-9"><?= htmlspecialchars($quote['frequency'] ?? '—') ?></dd>
+                <dt class="col-sm-3">Fecha estimada</dt><dd class="col-sm-9"><?= !empty($quote['estimated_date']) ? date('d/m/Y', strtotime($quote['estimated_date'])) : '—' ?></dd>
+            </dl>
+
+            <?php if(!empty($quote['comments'])): ?>
+                <h2 class="h5">Comentarios</h2>
+                <p><?= nl2br(htmlspecialchars($quote['comments'])) ?></p>
+            <?php endif; ?>
+
+            <?php if(!empty($attachments)): ?>
+                <h2 class="h5">Adjuntos</h2>
+                <ul>
+                    <?php foreach($attachments as $attachment): ?>
+                        <li><a href="<?= asset('storage/' . $attachment['path']) ?>" target="_blank"><?= htmlspecialchars($attachment['original_name']) ?></a></li>
+                    <?php endforeach; ?>
+                </ul>
+            <?php endif; ?>
         </div>
     </div>
 
-    <div class="col-md-4">
-        <div class="p-4 rounded-4 border border-secondary bg-dark text-white">
-            <h3 class="h5 text-warning mb-3">Actualizar Estado</h3>
-            <form method="POST" action="/admin/quote-requests/<?= $quoteRequest['id'] ?>">
+    <div class="col-lg-4">
+        <div class="admin-detail-card">
+            <h2 class="h5">Gestión de la oportunidad</h2>
+            <form method="POST" action="<?= route('admin.quote-requests.update', ['id' => $quote['id']]) ?>">
                 <?= csrf_field() ?>
-                <input type="hidden" name="_method" value="PUT">
-
                 <div class="mb-3">
-                    <label for="status" class="form-label text-white">Estado</label>
-                    <select class="form-select bg-dark text-white border-secondary" id="status" name="status">
-                        <option value="pending" <?= $quoteRequest['status'] === 'pending' ? 'selected' : '' ?>>Pendiente</option>
-                        <option value="contacted" <?= $quoteRequest['status'] === 'contacted' ? 'selected' : '' ?>>Contactado</option>
-                        <option value="quoted" <?= $quoteRequest['status'] === 'quoted' ? 'selected' : '' ?>>Cotizado</option>
-                        <option value="closed" <?= $quoteRequest['status'] === 'closed' ? 'selected' : '' ?>>Cerrado / Ganado</option>
-                        <option value="rejected" <?= $quoteRequest['status'] === 'rejected' ? 'selected' : '' ?>>Rechazado</option>
+                    <label class="form-label">Estado</label>
+                    <select name="status" class="form-select">
+                        <?php foreach($statuses as $key => $label): ?>
+                            <option value="<?= htmlspecialchars($key) ?>" <?= $quote['status'] === $key ? 'selected' : '' ?>><?= htmlspecialchars($label) ?></option>
+                        <?php endforeach; ?>
                     </select>
                 </div>
                 <div class="mb-3">
-                    <label for="notes" class="form-label text-white">Notas Internas</label>
-                    <textarea class="form-control bg-dark text-white border-secondary" id="notes" name="notes" rows="4"><?= e($quoteRequest['notes'] ?? '') ?></textarea>
+                    <label class="form-label">Notas internas</label>
+                    <textarea name="internal_notes" class="form-control" rows="4"><?= htmlspecialchars($quote['internal_notes'] ?? '') ?></textarea>
                 </div>
-                <button type="submit" class="btn btn-warning fw-bold w-100">Guardar Cambios</button>
+                <button type="submit" class="btn btn-cta w-100">Guardar</button>
+            </form>
+
+            <form method="POST" action="<?= route('admin.quote-requests.destroy', ['id' => $quote['id']]) ?>" class="mt-2" onsubmit="return confirm('¿Eliminar esta solicitud?');">
+                <?= csrf_field() ?>
+                <button type="submit" class="btn btn-outline-danger w-100">Eliminar solicitud</button>
             </form>
         </div>
     </div>

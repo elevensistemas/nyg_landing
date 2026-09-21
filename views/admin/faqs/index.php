@@ -1,51 +1,54 @@
-<div class="h4 text-white mb-4">Preguntas Frecuentes (FAQs)</div>
-
-<div class="row g-4 text-start">
-    <div class="col-md-5">
-        <div class="p-4 rounded-4 border border-secondary bg-dark text-white">
-            <h3 class="h5 mb-3 text-warning">Agregar FAQ</h3>
-            <form method="POST" action="/admin/faqs">
-                <?= csrf_field() ?>
-                <div class="mb-3">
-                    <label for="question" class="form-label text-white">Pregunta *</label>
-                    <input type="text" class="form-control bg-dark text-white border-secondary" id="question" name="question" required>
-                </div>
-                <div class="mb-3">
-                    <label for="answer" class="form-label text-white">Respuesta *</label>
-                    <textarea class="form-control bg-dark text-white border-secondary" id="answer" name="answer" rows="4" required></textarea>
-                </div>
-                <button type="submit" class="btn btn-warning fw-bold">Guardar FAQ</button>
-            </form>
-        </div>
+<div class="row">
+    <div class="col-lg-5">
+        <h2 class="h6">Nueva pregunta</h2>
+        <form method="POST" action="<?= route('admin.faqs.store') ?>">
+            <?= csrf_field() ?>
+            <div class="mb-3">
+                <label class="form-label">Pregunta</label>
+                <input type="text" name="question" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Respuesta</label>
+                <textarea name="answer" class="form-control" rows="3" required></textarea>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Categoría</label>
+                <input type="text" name="category" class="form-control">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Orden</label>
+                <input type="number" name="order" class="form-control" value="0">
+            </div>
+            <div class="form-check mb-3">
+                <input class="form-check-input" type="checkbox" name="is_published" value="1" id="new_faq_published" checked>
+                <label class="form-check-label" for="new_faq_published">Publicada</label>
+            </div>
+            <button type="submit" class="btn btn-cta">Crear</button>
+        </form>
     </div>
 
-    <div class="col-md-7">
-        <div class="table-responsive rounded-4 border border-secondary bg-dark">
-            <table class="table table-dark table-hover mb-0 align-middle">
-                <thead>
-                    <tr>
-                        <th>Pregunta</th>
-                        <th class="text-end">Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($faqs as $faq): ?>
-                        <tr>
-                            <td>
-                                <strong class="text-white d-block"><?= e($faq['question']) ?></strong>
-                                <small class="text-white-50"><?= e($faq['answer']) ?></small>
-                            </td>
-                            <td class="text-end">
-                                <form method="POST" action="/admin/faqs/<?= $faq['id'] ?>" class="d-inline" onsubmit="return confirm('¿Eliminar FAQ?')">
-                                    <?= csrf_field() ?>
-                                    <input type="hidden" name="_method" value="DELETE">
-                                    <button type="submit" class="btn btn-sm btn-outline-danger">Eliminar</button>
-                                </form>
-                            </td>
-                        </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
-        </div>
+    <div class="col-lg-7">
+        <?php if(!empty($faqs)): ?>
+            <?php foreach($faqs as $faq): ?>
+                <div class="admin-faq-item mb-3">
+                    <form method="POST" action="<?= route('admin.faqs.update', ['id' => $faq['id']]) ?>">
+                        <?= csrf_field() ?>
+                        <input type="text" name="question" class="form-control mb-2" value="<?= htmlspecialchars($faq['question']) ?>">
+                        <textarea name="answer" class="form-control mb-2" rows="2"><?= htmlspecialchars($faq['answer']) ?></textarea>
+                        <div class="d-flex align-items-center gap-2">
+                            <input type="text" name="category" class="form-control form-control-sm" value="<?= htmlspecialchars($faq['category'] ?? '') ?>" style="max-width:200px;">
+                            <label><input type="checkbox" name="is_published" value="1" <?= !empty($faq['is_published']) ? 'checked' : '' ?>> Publicada</label>
+                            <button type="submit" class="btn btn-sm btn-outline-dark">Guardar</button>
+                        </div>
+                    </form>
+                    <form method="POST" action="<?= route('admin.faqs.destroy', ['id' => $faq['id']]) ?>" onsubmit="return confirm('¿Eliminar esta pregunta?');" class="mt-1">
+                        <?= csrf_field() ?>
+                        <button type="submit" class="btn-link-danger">Eliminar</button>
+                    </form>
+                </div>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <p>No hay preguntas cargadas.</p>
+        <?php endif; ?>
     </div>
 </div>

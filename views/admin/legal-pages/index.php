@@ -1,24 +1,16 @@
-<div class="h4 text-white mb-4">Páginas Legales</div>
-
-<div class="table-responsive rounded-4 border border-secondary bg-dark text-start">
-    <table class="table table-dark table-hover mb-0 align-middle">
-        <thead>
-            <tr>
-                <th>Título</th>
-                <th>Slug</th>
-                <th class="text-end">Acción</th>
-            </tr>
-        </thead>
+<div class="table-responsive">
+    <table class="table admin-table">
+        <thead><tr><th>Título</th><th>Última revisión</th><th>Publicada</th><th></th></tr></thead>
         <tbody>
-            <?php foreach ($legalPages as $page): ?>
+            <?php foreach($pages as $page): ?>
                 <tr>
-                    <td class="fw-bold text-white"><?= e($page['title']) ?></td>
-                    <td><code><?= e($page['slug']) ?></code></td>
-                    <td class="text-end">
-                        <a href="/admin/legal-pages/<?= $page['id'] ?>/edit" class="btn btn-sm btn-outline-warning">Editar</a>
-                    </td>
+                    <td><?= htmlspecialchars($page['title']) ?></td>
+                    <td><?= !empty($page['last_reviewed_at']) ? date('d/m/Y', strtotime($page['last_reviewed_at'])) : 'Sin revisar' ?></td>
+                    <td><?= !empty($page['is_published']) ? 'Sí' : 'No' ?></td>
+                    <td><a href="<?= route('admin.legal-pages.edit', ['id' => $page['id']]) ?>">Editar</a></td>
                 </tr>
             <?php endforeach; ?>
         </tbody>
     </table>
 </div>
+<p class="text-muted">Recordá que estos textos deben ser validados por un profesional legal antes de su publicación definitiva.</p>

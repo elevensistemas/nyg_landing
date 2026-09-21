@@ -1,10 +1,11 @@
 <section class="page-hero" data-animate>
-    <div class="container text-center py-5">
-        <p class="eyebrow text-warning">Gracias</p>
-        <h1 class="text-white">Recibimos tu solicitud</h1>
-        <p class="lead-text text-white-50 max-w-600 mx-auto mt-3">
+    <div class="container text-center">
+        <p class="eyebrow">Gracias</p>
+        <h1>Recibimos tu solicitud</h1>
+        <p class="lead-text">
             Un integrante de nuestro equipo va a revisar los datos de tu operación y te va a contactar a la brevedad.
+            También recibiste un correo de confirmación.
         </p>
-        <a href="<?= route('home') ?>" class="btn btn-premium-yellow mt-4">Volver al inicio</a>
+        <a href="<?= route('home') ?>" class="btn btn-outline-dark mt-3">Volver al inicio</a>
     </div>
 </section>

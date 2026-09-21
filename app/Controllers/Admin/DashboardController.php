@@ -2,31 +2,26 @@
 
 namespace App\Controllers\Admin;
 
-use Core\Request;
-use Core\View;
-use App\Models\Service;
-use App\Models\QuoteRequest;
-use App\Models\ContactRequest;
-use App\Models\Client;
+use App\Helpers\DB;
+use App\Models\Visit;
 
-class DashboardController {
-    public function index(Request $request): string {
-        $servicesCount = count(Service::all());
-        $quoteRequestsCount = count(QuoteRequest::all());
-        $contactRequestsCount = count(ContactRequest::all());
-        $clientsCount = count(Client::all());
+class DashboardController extends AdminController
+{
+    public function index()
+    {
+        $stats = [
+            'quotes_new' => (int)DB::selectOne("SELECT COUNT(*) as count FROM quote_requests WHERE status = 'nueva'")['count'],
+            'quotes_total' => (int)DB::selectOne("SELECT COUNT(*) as count FROM quote_requests")['count'],
+            'contacts_new' => (int)DB::selectOne("SELECT COUNT(*) as count FROM contact_requests WHERE status = 'nueva' OR status = 'nuevo'")['count'],
+            'services_published' => (int)DB::selectOne("SELECT COUNT(*) as count FROM services WHERE is_published = 1 AND deleted_at IS NULL")['count'],
+        ];
 
-        $latestQuotes = array_slice(QuoteRequest::all(), 0, 5);
-        $latestContacts = array_slice(ContactRequest::all(), 0, 5);
+        $visitStats = Visit::getStats();
+        $recentVisits = Visit::getRecent(8);
 
-        return View::render('admin.dashboard', [
-            'servicesCount' => $servicesCount,
-            'quoteRequestsCount' => $quoteRequestsCount,
-            'contactRequestsCount' => $contactRequestsCount,
-            'clientsCount' => $clientsCount,
-            'latestQuotes' => $latestQuotes,
-            'latestContacts' => $latestContacts,
-            'metaTitle' => 'Dashboard — Panel Administrativo NYG'
-        ], 'layouts/admin');
+        $latestQuotes = DB::select("SELECT qr.*, s.name as service_name FROM quote_requests qr LEFT JOIN services s ON qr.service_id = s.id ORDER BY qr.created_at DESC LIMIT 5");
+        $latestContacts = DB::select("SELECT * FROM contact_requests ORDER BY created_at DESC LIMIT 5");
+
+        $this->renderAdmin('admin/dashboard', compact('stats', 'visitStats', 'recentVisits', 'latestQuotes', 'latestContacts'), 'Panel de Control');
     }
 }

@@ -2,34 +2,16 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\MorphOne;
+use App\Helpers\DB;
 
-class Page extends Model
+class Page
 {
-    use HasFactory;
-
-    protected $fillable = ['title', 'slug', 'template', 'is_published'];
-
-    protected function casts(): array
+    public static function findBySlug(string $slug): ?array
     {
-        return ['is_published' => 'boolean'];
-    }
-
-    public function sections(): HasMany
-    {
-        return $this->hasMany(PageSection::class)->orderBy('order');
-    }
-
-    public function seo(): MorphOne
-    {
-        return $this->morphOne(SeoMetadata::class, 'seo_metadatable');
-    }
-
-    public function section(string $key): ?PageSection
-    {
-        return $this->sections->firstWhere('key', $key);
+        $page = DB::selectOne("SELECT * FROM pages WHERE slug = :slug LIMIT 1", ['slug' => $slug]);
+        if ($page) {
+            $page['sections'] = DB::select("SELECT * FROM page_sections WHERE page_id = :page_id ORDER BY `order` ASC", ['page_id' => $page['id']]);
+        }
+        return $page;
     }
 }

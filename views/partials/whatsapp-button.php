@@ -1,9 +1,9 @@
 <?php
-$whatsappNumber = \App\Models\Setting::get('whatsapp_number', '5491100000000');
+use App\Models\Setting;
+$whatsappNumber = Setting::get('whatsapp_number', '5491130091907');
 $whatsappHref = 'https://wa.me/'.$whatsappNumber.'?text='.rawurlencode('Hola, quisiera cotizar una operación logística.');
 ?>
-
-<a href="<?= e($whatsappHref) ?>" target="_blank" rel="noopener"
+<a href="<?= $whatsappHref ?>" target="_blank" rel="noopener"
    class="whatsapp-float"
    aria-label="Escribir a NYG Transporte por WhatsApp">
     <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
