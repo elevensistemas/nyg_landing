@@ -89,7 +89,7 @@ CREATE TABLE `clients` (
 
 LOCK TABLES `clients` WRITE;
 /*!40000 ALTER TABLE `clients` DISABLE KEYS */;
-INSERT INTO `clients` VALUES (1,'YPF','/images/clients/ypf.svg',NULL,1,1,'2026-08-02 21:19:01','2026-08-02 21:19:01'),(2,'Quilmes','/images/clients/quilmes.svg',NULL,2,1,'2026-08-02 21:19:01','2026-08-02 21:19:01'),(3,'Shell','/images/clients/shell.svg',NULL,3,1,'2026-08-02 21:19:01','2026-08-02 21:19:01'),(4,'Danone','/images/clients/danone.svg',NULL,4,1,'2026-08-02 21:19:01','2026-08-02 21:19:01'),(5,'Mercado Libre','/images/clients/mercadolibre.png',NULL,5,1,'2026-08-02 21:19:01','2026-08-02 21:19:01'),(6,'Ocasa','/images/clients/ocasa.png',NULL,6,1,'2026-08-02 21:19:01','2026-08-02 21:19:01'),(7,'Webpack','/images/clients/webpack.png',NULL,7,1,'2026-08-02 21:19:01','2026-08-02 21:19:01'),(8,'Welivery','/images/clients/welivery.png',NULL,8,1,'2026-08-02 21:19:01','2026-08-02 21:19:01');
+INSERT INTO `clients` VALUES (1,'Mercado Libre','images/clients/mercadolibre.png',NULL,0,1,'2026-08-02 21:19:01','2026-08-02 21:19:01'),(2,'Ocasa','images/clients/ocasa.png',NULL,1,1,'2026-08-02 21:19:01','2026-08-02 21:19:01'),(3,'Webpack','images/clients/webpack.png',NULL,2,1,'2026-08-02 21:19:01','2026-08-02 21:19:01'),(4,'Welivery','images/clients/welivery.png',NULL,3,1,'2026-08-02 21:19:01','2026-08-02 21:19:01');
 /*!40000 ALTER TABLE `clients` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -518,7 +518,7 @@ CREATE TABLE `quote_requests` (
   KEY `quote_requests_service_id_foreign` (`service_id`),
   KEY `quote_requests_status_index` (`status`),
   CONSTRAINT `quote_requests_service_id_foreign` FOREIGN KEY (`service_id`) REFERENCES `services` (`id`) ON DELETE SET NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -527,6 +527,7 @@ CREATE TABLE `quote_requests` (
 
 LOCK TABLES `quote_requests` WRITE;
 /*!40000 ALTER TABLE `quote_requests` DISABLE KEYS */;
+INSERT INTO `quote_requests` VALUES (1,'Carlos Rodríguez','Distribuidora San Martín','carlos.rodriguez@example.com','11-4567-8901',NULL,NULL,'Buenos Aires','Rosario',NULL,0,NULL,NULL,NULL,NULL,NULL,NULL,'Necesitamos cotización de cross-docking semanal.','nueva',NULL,'127.0.0.1','Mozilla/5.0 (iPhone; CPU iPhone OS 16_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.5 Mobile/15E148 Safari/604.1',NULL,'2026-09-21 19:17:24','2026-09-21 19:17:24');
 /*!40000 ALTER TABLE `quote_requests` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -630,7 +631,7 @@ CREATE TABLE `services` (
 
 LOCK TABLES `services` WRITE;
 /*!40000 ALTER TABLE `services` DISABLE KEYS */;
-INSERT INTO `services` VALUES (1,1,'Transporte terrestre','transporte-terrestre','Necesitás que tus insumos o productos lleguen a planta o al centro de distribución sin demoras ni sorpresas.','Transportamos insumos y productos para el abastecimiento de plantas productivas y centros de distribución.','Coordinamos el transporte terrestre de tu carga con unidades preparadas según el tipo de mercadería y el destino. Cada unidad de la flota cuenta con seguimiento satelital con recupero, visible para el cliente en tiempo real.\n\nTrabajamos la operación de punta a punta: retiro, traslado y confirmación de entrega, manteniendo informado al cliente sobre el estado de su envío.','Seguimiento satelital de la unidad.\nCoordinación de horarios de retiro y entrega.\nInformación del estado del envío durante todo el trayecto.','truck',NULL,0,1,1,'2026-08-01 22:52:07','2026-08-01 22:52:07',NULL),(2,1,'Cross-Docking','cross-docking','Necesitás agilizar la distribución y transferir mercadería con mínimo almacenamiento.','Transferencia directa de mercadería con mínimo almacenamiento para acelerar los tiempos de tránsito.','Consolidamos y desconsolidamos cargas directamente en nuestras plataformas de transferencia. Los productos entrantes se despachan de forma inmediata hacia sus destinos finales, reduciendo costos de almacenamiento y optimizando los tiempos de tránsito.','Reducción en los costos de almacenamiento y manipulación.\nDisminución del tiempo total del ciclo de entrega.\nOptimización del flujo de stock en centros urbanos.','refresh-cw',NULL,1,1,1,'2026-08-01 22:52:07','2026-08-01 22:52:07',NULL),(3,2,'Almacenamiento','almacenamiento','Necesitás un lugar confiable para recibir, clasificar y preparar tu mercadería antes del despacho.','Recepción, clasificación y almacenamiento de productos, con preparación y despacho de envíos.','Recepcionamos, clasificamos y almacenamos los productos de cada cliente en nuestros depósitos, para luego realizar la preparación y el despacho de los envíos según la demanda.','Recepción y clasificación ordenada de mercadería.\nPreparación de pedidos antes del despacho.\nCoordinación directa con el área de distribución.','warehouse',NULL,2,1,1,'2026-08-01 22:52:07','2026-08-01 22:52:07',NULL),(4,2,'Distribución','distribucion','Tenés que llegar a muchos puntos de entrega distintos, con tiempos y costos que tengan sentido.','Red de distribución versátil y flexible, con servicios de calidad a precios competitivos.','Contamos con una red de distribución versátil y flexible que permite brindar un servicio de calidad a precios competitivos, adaptándonos a los puntos de entrega y tiempos que necesita cada operación.','Red de distribución flexible.\nAdaptación a múltiples puntos de entrega.\nCoordinación con almacenamiento y transporte.','route',NULL,3,1,1,'2026-08-01 22:52:07','2026-08-01 22:52:07',NULL),(5,1,'Cargas completas','cargas-completas','Necesitás mover un volumen grande de mercadería en un solo viaje, sin compartir unidad con otra carga.','Transporte de cargas completas, coordinado según el volumen y el tipo de mercadería.','Coordinamos el traslado de cargas completas de una forma personalizada, evaluando el tipo de mercadería, el destino y los tiempos requeridos para cada operación.','Traslado dedicado por operación.\nCoordinación personalizada de horarios.\nSeguimiento satelital de la unidad.','container',NULL,4,1,1,'2026-08-01 22:52:07','2026-08-01 22:52:07',NULL),(6,2,'Servicios puerta a puerta','servicios-puerta-a-puerta','Necesitás que el envío llegue directamente a destino, sin intermediarios ni pasos adicionales.','Servicio integral de envíos puerta a puerta.','Brindamos un servicio de envío puerta a puerta, ocupándonos del traslado completo de la mercadería desde el punto de origen hasta el destino final indicado por el cliente.','Traslado directo a destino.\nMenos pasos y coordinación simplificada.\nInformación del estado del envío.','door-open',NULL,5,1,1,'2026-08-01 22:52:07','2026-08-01 22:52:07',NULL),(7,2,'Gestión de compras y retiros','gestion-de-compras-y-retiros','Necesitás que alguien se encargue de retirar la mercadería comprada y coordinar su traslado.','Gestión de compra y retiro de mercadería para su posterior traslado.','Nos encargamos de la gestión de compra y el retiro de la mercadería en el punto de origen, coordinando el traslado posterior según las necesidades del cliente.','Gestión y retiro coordinado.\nMenos gestiones a cargo del cliente.\nSeguimiento del proceso completo.','clipboard-check',NULL,6,0,1,'2026-08-01 22:52:07','2026-08-01 22:52:07',NULL),(8,3,'Transporte y gestión aduanera','transporte-y-gestion-aduanera','Tu operación de importación o exportación necesita transporte y gestión aduanera coordinados.','Transporte y gestión aduanera para operaciones de importación y exportación.','Ofrecemos servicio de transporte y gestión aduanera, tanto para operaciones de importación como de exportación, dentro del alcance confirmado de nuestra operación actual.','Transporte asociado a operaciones de comercio exterior.\nGestión aduanera de importación y exportación.\nCoordinación con el resto de la cadena logística.','ship',NULL,7,0,1,'2026-08-01 22:52:07','2026-08-01 22:52:07',NULL);
+INSERT INTO `services` VALUES (1,1,'Transporte terrestre','transporte-terrestre','Necesitás que tus insumos o productos lleguen a planta o al centro de distribución sin demoras ni sorpresas.','Transportamos insumos y productos para el abastecimiento de plantas productivas y centros de distribución.','Coordinamos el transporte terrestre de tu carga con unidades preparadas según el tipo de mercadería y el destino. Cada unidad de la flota cuenta con seguimiento satelital con recupero, visible para el cliente en tiempo real.\n\nTrabajamos la operación de punta a punta: retiro, traslado y confirmación de entrega, manteniendo informado al cliente sobre el estado de su envío.','Seguimiento satelital de la unidad.\nCoordinación de horarios de retiro y entrega.\nInformación del estado del envío durante todo el trayecto.','truck',NULL,0,1,1,'2026-08-01 22:52:07','2026-08-01 22:52:07',NULL),(2,1,'Cross-Docking','cross-docking','Necesitás agilizar la distribución y transferir mercadería con mínimo almacenamiento.','Transferencia directa de mercadería con mínimo almacenamiento para acelerar los tiempos de tránsito.','Consolidamos y desconsolidamos cargas directamente en nuestras plataformas de transferencia. Los productos entrantes se despachan de forma inmediata hacia sus destinos finales, reduciendo costos de almacenamiento y optimizando los tiempos de tránsito.','Reducción en los costos de almacenamiento y manipulación.\nDisminución del tiempo total del ciclo de entrega.\nOptimización del flujo de stock en centros urbanos.','refresh-cw',NULL,1,1,1,'2026-08-01 22:52:07','2026-08-01 22:52:07',NULL),(3,2,'Almacenamiento','almacenamiento','Necesitás un lugar confiable para recibir, clasificar y preparar tu mercadería antes del despacho.','Recepción, clasificación y almacenamiento de productos, con preparación y despacho de envíos.','Recepcionamos, clasificamos y almacenamos los productos de cada cliente en nuestros depósitos, para luego realizar la preparación y el despacho de los envíos según la demanda.','Recepción y clasificación ordenada de mercadería.\nPreparación de pedidos antes del despacho.\nCoordinación directa con el área de distribución.','warehouse',NULL,2,1,1,'2026-08-01 22:52:07','2026-08-01 22:52:07',NULL),(4,2,'Distribución','distribucion','Tenés que llegar a muchos puntos de entrega distintos, con tiempos y costos que tengan sentido.','Red de distribución versátil y flexible, con servicios de calidad a precios competitivos.','Contamos con una red de distribución versátil y flexible que permite brindar un servicio de calidad a precios competitivos, adaptándonos a los puntos de entrega y tiempos que necesita cada operación.','Red de distribución flexible.\nAdaptación a múltiples puntos de entrega.\nCoordinación con almacenamiento y transporte.','route',NULL,3,1,1,'2026-08-01 22:52:07','2026-08-01 22:52:07',NULL),(5,1,'Cargas completas','cargas-completas','Necesitás mover un volumen grande de mercadería en un solo viaje, sin compartir unidad con otra carga.','Transporte de cargas completas, coordinado según el volumen y el tipo de mercadería.','Coordinamos el traslado de cargas completas de una forma personalizada, evaluando el tipo de mercadería, el destino y los tiempos requeridos para cada operación.','Traslado dedicado por operación.\nCoordinación personalizada de horarios.\nSeguimiento satelital de la unidad.','container',NULL,4,0,1,'2026-08-01 22:52:07','2026-08-01 22:52:07',NULL),(6,2,'Servicios puerta a puerta','servicios-puerta-a-puerta','Necesitás que el envío llegue directamente a destino, sin intermediarios ni pasos adicionales.','Servicio integral de envíos puerta a puerta.','Brindamos un servicio de envío puerta a puerta, ocupándonos del traslado completo de la mercadería desde el punto de origen hasta el destino final indicado por el cliente.','Traslado directo a destino.\nMenos pasos y coordinación simplificada.\nInformación del estado del envío.','door-open',NULL,5,0,1,'2026-08-01 22:52:07','2026-08-01 22:52:07',NULL),(7,2,'Gestión de compras y retiros','gestion-de-compras-y-retiros','Necesitás que alguien se encargue de retirar la mercadería comprada y coordinar su traslado.','Gestión de compra y retiro de mercadería para su posterior traslado.','Nos encargamos de la gestión de compra y el retiro de la mercadería en el punto de origen, coordinando el traslado posterior según las necesidades del cliente.','Gestión y retiro coordinado.\nMenos gestiones a cargo del cliente.\nSeguimiento del proceso completo.','clipboard-check',NULL,6,0,1,'2026-08-01 22:52:07','2026-08-01 22:52:07',NULL),(8,3,'Transporte y gestión aduanera','transporte-y-gestion-aduanera','Tu operación de importación o exportación necesita transporte y gestión aduanera coordinados.','Transporte y gestión aduanera para operaciones de importación y exportación.','Ofrecemos servicio de transporte y gestión aduanera, tanto para operaciones de importación como de exportación, dentro del alcance confirmado de nuestra operación actual.','Transporte asociado a operaciones de comercio exterior.\nGestión aduanera de importación y exportación.\nCoordinación con el resto de la cadena logística.','ship',NULL,7,0,1,'2026-08-01 22:52:07','2026-08-01 22:52:07',NULL);
 /*!40000 ALTER TABLE `services` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -722,8 +723,51 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'Administrador NYG','admin@nygtransporte.com.ar','2026-08-01 22:52:07','$2y$12$VMMfOe0N3T3c2bz59w4SWenH11CvijR1nuuZFK3sO6olV.mCfR/vm',1,NULL,'2026-08-01 22:52:07','2026-08-01 22:52:07');
+INSERT INTO `users` VALUES (1,'Administrador NYG','admin@nygtransporte.com.ar','2026-08-01 22:52:07','$2y$10$7CCyshnFCkrQz2W/8kQK3ufsV16tK.zJTVYTHW72bk1MS7a26v9q.',1,NULL,'2026-08-01 22:52:07','2026-08-01 22:52:07');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `visits`
+--
+
+DROP TABLE IF EXISTS `visits`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `visits` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `session_id` varchar(100) NOT NULL,
+  `ip_address` varchar(45) NOT NULL,
+  `page_url` varchar(255) NOT NULL,
+  `page_title` varchar(150) NOT NULL,
+  `referrer` varchar(500) DEFAULT NULL,
+  `utm_source` varchar(100) DEFAULT NULL,
+  `utm_medium` varchar(100) DEFAULT NULL,
+  `utm_campaign` varchar(100) DEFAULT NULL,
+  `device_type` varchar(30) DEFAULT 'Escritorio',
+  `browser` varchar(50) DEFAULT NULL,
+  `has_submitted_form` tinyint(1) NOT NULL DEFAULT 0,
+  `form_type` varchar(50) DEFAULT NULL,
+  `form_request_id` int(11) DEFAULT NULL,
+  `visited_at` datetime NOT NULL,
+  `created_at` timestamp NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `idx_visited_at` (`visited_at`),
+  KEY `idx_session_id` (`session_id`),
+  KEY `idx_ip_address` (`ip_address`),
+  KEY `idx_form` (`has_submitted_form`)
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `visits`
+--
+
+LOCK TABLES `visits` WRITE;
+/*!40000 ALTER TABLE `visits` DISABLE KEYS */;
+INSERT INTO `visits` VALUES (1,'63a2s8p4mkfsoag8sr66h2og4k','190.19.45.112','/?utm_source=meta&utm_medium=cpc&utm_campaign=crossdocking_q3','Inicio','Meta Ads (Campaña)','meta','cpc','crossdocking_q3','Móvil','Safari',0,NULL,NULL,'2026-09-21 11:16:48','2026-09-21 14:16:48','2026-09-21 14:16:48'),(2,'63a2s8p4mkfsoag8sr66h2og4k','190.19.45.112','/servicios/cross-docking','Servicio: Cross-Docking','Meta Ads (Campaña)','meta','cpc','crossdocking_q3','Móvil','Safari',0,NULL,NULL,'2026-09-21 11:16:48','2026-09-21 14:16:48','2026-09-21 14:16:48'),(3,'63a2s8p4mkfsoag8sr66h2og4k','190.19.45.112','/cotizacion','Formulario de Cotización','Meta Ads (Campaña)','meta','cpc','crossdocking_q3','Móvil','Safari',0,NULL,NULL,'2026-09-21 11:16:48','2026-09-21 14:16:48','2026-09-21 14:16:48'),(4,'s6l22m5aelen7n66em7p2voo93','181.44.200.55','/','Inicio','Google (Búsqueda Orgánica)',NULL,NULL,NULL,'Escritorio','Chrome',0,NULL,NULL,'2026-09-21 11:16:49','2026-09-21 14:16:49','2026-09-21 14:16:49'),(5,'s6l22m5aelen7n66em7p2voo93','181.44.200.55','/empresa','Nosotros (Empresa)','Google (Búsqueda Orgánica)',NULL,NULL,NULL,'Escritorio','Chrome',0,NULL,NULL,'2026-09-21 11:16:49','2026-09-21 14:16:49','2026-09-21 14:16:49'),(6,'srvko03f61fnmro2updkmo6qj8','190.19.45.112','/?utm_source=meta&utm_medium=cpc&utm_campaign=anuncio_meta_transporte','Inicio','Meta Ads (Campaña)','meta','cpc','anuncio_meta_transporte','Móvil','Safari',1,'Cotización',1,'2026-09-21 11:17:24','2026-09-21 14:17:24','2026-09-21 14:17:24'),(7,'srvko03f61fnmro2updkmo6qj8','190.19.45.112','/servicios/cross-docking','Servicio: Cross-Docking','Meta Ads (Campaña)','meta','cpc','anuncio_meta_transporte','Móvil','Safari',1,'Cotización',1,'2026-09-21 11:17:24','2026-09-21 14:17:24','2026-09-21 14:17:24'),(8,'srvko03f61fnmro2updkmo6qj8','190.19.45.112','/cotizacion','Formulario de Cotización','Meta Ads (Campaña)','meta','cpc','anuncio_meta_transporte','Móvil','Safari',1,'Cotización',1,'2026-09-21 11:17:24','2026-09-21 14:17:24','2026-09-21 14:17:24'),(9,'srvko03f61fnmro2updkmo6qj8','190.19.45.112','/cotizacion/gracias','Cotización enviada (Gracias)','Meta Ads (Campaña)','meta','cpc','anuncio_meta_transporte','Móvil','Safari',0,NULL,NULL,'2026-09-21 11:17:24','2026-09-21 14:17:24','2026-09-21 14:17:24');
+/*!40000 ALTER TABLE `visits` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -735,4 +779,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-08-31 17:09:00
+-- Dump completed on 2026-09-21 11:23:43
